@@ -1,0 +1,27 @@
+mkdir dev
+mkdir home
+mkdir tmp
+cd dev
+touch ttys0
+touch ttys1
+cd ..
+cd home
+mkdir user
+cd user
+mkdir Documents
+mkdir Pictures
+cd Documents
+touch hw5.java
+cd ..
+cd Pictures
+touch puppies.jpg
+cd
+cd tmp
+mkdir myFolder
+cd myFolder
+touch file1.txt
+touch file2.txt
+touch file3.txt
+cd
+ls -R
+exit
