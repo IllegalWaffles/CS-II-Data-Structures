@@ -14,6 +14,8 @@
  * @author Kuba Gasiorowski
  *
  */
+import java.util.ArrayList;
+
 public class DirectoryTree {
 
 	//The root of the whole tree
@@ -36,7 +38,7 @@ public class DirectoryTree {
 	public DirectoryTree()
 	{
 		
-		root = new DirectoryNode("/", numChildrenPerNode, DirectoryNode.DIRECTORY, null);
+		root = new DirectoryNode("root", numChildrenPerNode, DirectoryNode.DIRECTORY, null);
 		cursor = root;
 		
 	}
@@ -120,20 +122,21 @@ public class DirectoryTree {
 	public String presentWorkingDirectory()
 	{
 		
-		String toReturn = "";
-		
 		DirectoryNode saved = cursor;
 		
-		while(cursor.getParent() != null){
-			
-			toReturn = cursor.getName() + "/" + toReturn;
+		String toReturn = cursor.getName();
+		
+		while(cursor.getParent() != null)
+		{
+		
 			cursor = cursor.getParent();
+			toReturn = cursor.getName() + "/" + toReturn;
 			
-		}	
+		}
+		
 		
 		cursor = saved;
-		
-		return "/" + toReturn;
+		return toReturn;
 		
 		
 	}
@@ -161,19 +164,6 @@ public class DirectoryTree {
 				toReturn += children[i].getName() + " ";
 		
 		return toReturn.trim();
-		
-		//Loop here
-		/*
-		if(cursor.getLeft() != null)
-			toReturn += cursor.getLeft().getName() + " ";
-
-		if(cursor.getMiddle() != null)
-			toReturn += cursor.getMiddle().getName() + " ";
-		
-		if(cursor.getRight() != null)
-			toReturn += cursor.getRight().getName() + " ";
-		*/
-		//Loop terminates
 		
 		
 		
@@ -270,6 +260,43 @@ public class DirectoryTree {
 	}
 	
 	/**
+	 * 
+	 * @param name
+	 * @throws IllegalArgumentException
+	 * @throws NotADirectoryException
+	 */
+	public void find(String name) throws IllegalArgumentException, NotADirectoryException
+	{
+		
+		//Saves the current position of the cursor
+		DirectoryNode saved = cursor;
+		
+		//If the name is invalid, throw an exception
+		if(!isValidName(name))
+			throw new IllegalArgumentException(name + ": Not a valid name");
+		
+		//Finds all matches of the nodes with the name passed in, stores into an array
+		ArrayList<DirectoryNode> matches = cursor.find(name);
+		
+		//If no matches were found, throw an exception
+		if(matches.size() == 0)
+			throw new NotADirectoryException(name + ": File not found");
+		
+		//Prints the path of each node
+		for(int i = 0; i < matches.size(); i++)
+		{
+			
+			cursor = matches.get(i);
+			System.out.println(presentWorkingDirectory());
+		
+		}
+		
+		DirectoryNode.clearList();
+		cursor = saved;
+		
+	}
+	
+	/**
 	 * Helper method which determines if a file/directory has a valid name.
 	 * 
 	 * @param s
@@ -285,7 +312,6 @@ public class DirectoryTree {
 				return false;
 		
 		return true;
-		
 		
 	}
 	

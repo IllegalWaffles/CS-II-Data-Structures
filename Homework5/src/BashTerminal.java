@@ -30,7 +30,28 @@ public class BashTerminal {
 		Scanner sc = new Scanner(System.in);
 		String user, host, prompt, date, time, rawInput, input[];
 		String dateTime[]  = LocalDateTime.now().toString().split("T");
-		boolean finished = false;
+		boolean finished = false;		
+		
+		/*
+		 * Code below exists so a predefined set of instructions
+		 * can be read from a file instead of entering them all
+	 	 * each time. Commenting it out when you want to read
+	 	 * from console will suffice.
+		 */
+		
+		/*
+		try{
+			
+			sc = new Scanner(new File("src/test1"));
+			
+		}
+		catch(Exception e)
+		{
+			
+			System.out.println("File not found");
+			
+		}
+		*/
 		
 		date = dateTime[0];
 		time = dateTime[1].substring(0, dateTime[1].length()-4);
@@ -64,11 +85,7 @@ public class BashTerminal {
 				//This serves no purpose in this program.
 				//But I just couldn't resist.
 				for(int i = 1; i < input.length; i++)
-				{
-					
 					System.out.print(input[i] + " ");
-					
-				}
 				
 				System.out.print("\n");
 				
@@ -146,10 +163,10 @@ public class BashTerminal {
 						myTree.makeDirectory(input[1]);
 				
 					}
-					catch(IllegalArgumentException e)
+					catch(ArrayIndexOutOfBoundsException e)
 					{
-						//If the name contains a '/'
-						System.out.println("mkdir: " + e.getMessage());
+					
+						System.out.println("mkdir: invalid input: type \"help mkdir\" for help");
 						
 					}
 					catch(Exception e)
@@ -248,9 +265,33 @@ public class BashTerminal {
 				}
 				catch(Exception e)
 				{
+					
 					System.out.println("history: " + e.getMessage());
+				
 				}
 				
+				
+			}
+			else if(input[0].equals("find"))
+			{
+				
+				try{
+					
+					myTree.find(input[1]);
+					
+				}
+				catch(ArrayIndexOutOfBoundsException e)
+				{
+					
+					System.out.println("find: invalid input: type \"help find\" for help");
+					
+				}
+				catch(Exception e)
+				{
+					
+					System.out.println("find: " + e.getMessage());
+					
+				}
 				
 			}
 			else
@@ -322,6 +363,10 @@ public class BashTerminal {
 			System.out.println("Clears the console\n"
 					+ "Usage:\n"
 					+ " clear - clears the screen");
+		else if(cmd.equals("find"))
+			System.out.println("Finds all files with the name given and prints their paths\n"
+					+ "Usage:\n"
+					+ " find [filename] - finds and prints the paths of all files matching this name");
 		else if(cmd.equals("GENERIC"))
 			System.out.println("Available commands:\n"
 					+ " pwd - prints the path of the current working directory\n"
@@ -330,6 +375,7 @@ public class BashTerminal {
 					+ " mkdir - generates a new directory\n"
 					+ " touch - generates a new file\n"
 					+ " clear - clears the console\n"
+					+ " find - finds all instances of the given name\n"
 					+ " help - prints this message, or type help [command] to find out more about a specific command");
 		else throw new IllegalArgumentException(cmd + ": command not found");
 		

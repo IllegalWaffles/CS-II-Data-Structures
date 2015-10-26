@@ -15,6 +15,7 @@ touch hw5.java
 cd ..
 cd Pictures
 touch puppies.jpg
+touch file1.txt
 cd
 cd tmp
 mkdir myFolder
@@ -24,4 +25,7 @@ touch file2.txt
 touch file3.txt
 cd
 ls -R
+find file1.txt
+find file2.txt
+find wpofjwpef
 exit

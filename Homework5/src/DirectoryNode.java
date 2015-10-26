@@ -13,6 +13,9 @@
  * @author Kuba Gasiorowski
  *
  */
+
+import java.util.ArrayList;
+
 public class DirectoryNode {
 
 	//In order to simplify how this system works
@@ -22,7 +25,7 @@ public class DirectoryNode {
 	private static final String TAB = "   ";
 	
 	//Used when printing a recursive directory listing
-	private static int numTabs;
+	private static int numTabs = 0;
 	
 	//The name of this node. The root is always called "/"
 	private String name;
@@ -32,6 +35,10 @@ public class DirectoryNode {
 	
 	//The type of this file
 	private boolean isFile;
+	
+	//When the found method is called and an object
+	//match is encountered, this is incremented
+	private static ArrayList<DirectoryNode> nodeMatches = new ArrayList<DirectoryNode>();
 	
 	/**
 	 * Generates a new DirectoryNode object with the given name.
@@ -44,7 +51,6 @@ public class DirectoryNode {
 		
 		children = new DirectoryNode[numChildren];
 		this.name = name;
-		numTabs = 0;
 		
 	}
 	
@@ -159,17 +165,6 @@ public class DirectoryNode {
 		
 		throw new FullDirectoryException(this.name + ": Directory is full");
 		
-		//Loop here
-		/*
-		if(left == null)
-			left = node;
-		else if(middle == null)
-			middle = node;
-		else if(right == null)
-			right = node;
-		*/
-		//Loop terminates
-		
 	}
 	
 	/**
@@ -189,25 +184,71 @@ public class DirectoryNode {
 		
 		numTabs++;
 		
+		//Recursive call here
 		for(int i = 0; i < children.length; i++)
 			if(children[i] != null)
 				children[i].preOrder();
 		
-		//Loop here
-		
-		/*
-		if(left != null)
-			left.preOrder();
-		
-		if(middle != null)
-			middle.preOrder();
-		
-		if(right != null)
-			right.preOrder();
-		*/	
-		//Loop terminates
 		
 		numTabs--;
+		
+	}
+	
+	/**
+	 * Clears the list of DirectoryNodes that were saved during a 
+	 * recursive find call. 
+	 * 
+	 * Call this method whenever outside code calls the DirectoryNode.find() method.
+	 */
+	public static void clearList()
+	{
+		
+		nodeMatches = new ArrayList<DirectoryNode>();
+		
+	}
+	
+	/**
+	 * Finds the node with the name 'name' in
+	 * this node and all of its subnodes. 
+	 * 
+	 * Returns an arraylist of matches at the 
+	 * end of the recursive call.
+	 * 
+	 * @param name
+	 * 		the name to search for
+	 * @return
+	 * 		an arraylist of references to matches in the tree
+	 * 
+	 */
+	public ArrayList<DirectoryNode> find(String name)
+	{
+		
+		if(this.getName().equals(name))
+		{
+			
+			//System.out.println("Instance found. Adding reference to array");
+			nodeMatches.add(this);
+			
+		}
+			
+		for(int i=0;i<children.length;i++)
+			if(children[i] != null)
+				children[i].find(name);
+		
+		
+		return nodeMatches;
+		
+	}
+	
+	/**
+	 * Returns a string representation of this object.
+	 * @return
+	 * 		a string representation of this object
+	 */
+	public String toString()
+	{
+		
+		return name;
 		
 	}
 	
