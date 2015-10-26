@@ -8,7 +8,8 @@
  * 
  * Thrown when all of a
  * directory's children are
- * full. 
+ * occupied, and therefore has
+ * no room for any additional children. 
  * 
  * @author Kuba Gasiorowski
  *

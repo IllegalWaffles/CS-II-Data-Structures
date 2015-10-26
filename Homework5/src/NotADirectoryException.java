@@ -6,7 +6,7 @@
  * Rec TA: Ka Wing Fong
  * Grading Ta: Zhichuang Sun
  * 
- * Thrown when a designated file
+ * Thrown when a node
  * is not a directory and therefore
  * cannot be operated on.
  * 
