@@ -78,6 +78,7 @@ public class BashTerminal {
 				//Exits the program
 				System.out.println("logout");
 				finished = true;
+				
 			}
 			else if(input[0].equals("echo"))
 			{

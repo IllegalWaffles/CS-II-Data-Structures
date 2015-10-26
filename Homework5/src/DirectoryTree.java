@@ -87,7 +87,7 @@ public class DirectoryTree {
 		}
 		else
 		{
-		
+				
 			for(int i = 0; i < children.length; i++)
 				if(children[i] != null && children[i].getName().equals(name))
 				{
