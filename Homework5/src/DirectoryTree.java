@@ -73,39 +73,87 @@ public class DirectoryTree {
 	 */
 	public void changeDirectory(String name) throws NotADirectoryException
 	{
-		
-		DirectoryNode[] children = cursor.getChildren();
 	
+		/* 
+		 * Algorithm:
+		 * Parse input
+		 * if(input[0].equals("root"))
+		 * 		cursor == root
+		 * 		remove input[0], shift everything after down
+		 * 		
+		 * loops through each next string
+		 * 		attempts to change directory to this
+		 * 		if not directory or does not exist throw exception
+		 * 
+		 */
+		
 		if(name.equals(".."))
 		{
 			
 			if(cursor == root)
-				throw new NotADirectoryException(name + ": Already in root directory");
+				throw new NotADirectoryException("root: Already in root directory");
 			else
 				cursor = cursor.getParent();
 			
 		}
 		else
 		{
-				
-			for(int i = 0; i < children.length; i++)
-				if(children[i] != null && children[i].getName().equals(name))
+
+			String[] parsedInput = name.split("/");
+			DirectoryNode children[], initialCursor;
+
+			if(parsedInput[0].equals("root"))
+			{
+
+				String[] temp = new String[parsedInput.length-1];
+
+				cursor = root;
+
+				for(int i = 0; i < parsedInput.length-1;i++)
+					temp[i] = parsedInput[i+1];
+
+				parsedInput = temp;
+
+			}
+
+			//Loops through each next directory name
+			for(int i = 0; i < parsedInput.length; i++)
+			{
+
+				//Gets the children from the current cursor
+				children = cursor.getChildren();
+
+				//Saves the initial cursor location.
+				initialCursor = cursor;
+
+				//Loops through each child of the current node
+				for(int j = 0; j < children.length; j++)
 				{
-					
-					if(children[i].isFile())
-						throw new NotADirectoryException(name + ": Not a directory");
-					else
-						cursor = children[i];
-					
-					return;
-				
+					//If the child matches
+					if(children[j] != null && children[j].getName().equals(parsedInput[i]))
+					{
+
+						if(children[j].isFile())
+							throw new NotADirectoryException(name + ": Not a directory");
+						else
+						{
+							cursor = children[j];
+							break;
+						}
+
+					}
+
 				}
-			
-			//If the loop goes through each child and none match,
-			//the directory does not exist. Throw an exception.
-			throw new NotADirectoryException(name + ": No such file or directory");
-		}
+
+				//If the directory has not changed,
+				//the cursor has not moved and the specified file does not exist
+				if(initialCursor == cursor)
+					throw new NotADirectoryException(parsedInput[i] + ": No such file or directory");
+
+			}
 		
+		}
+	
 	}
 	
 	/**

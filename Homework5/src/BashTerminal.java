@@ -39,19 +39,19 @@ public class BashTerminal {
 	 	 * from console will suffice.
 		 */
 		
-		/*
+		
 		try{
 			
-			sc = new Scanner(new File("src/test1"));
+			sc = new Scanner(new File("src/test2"));
 			
 		}
-		catch(Exception e)
+		catch(FileNotFoundException e)
 		{
 			
 			System.out.println("File not found");
 			
 		}
-		*/
+		
 		
 		date = dateTime[0];
 		time = dateTime[1].substring(0, dateTime[1].length()-4);
@@ -66,7 +66,7 @@ public class BashTerminal {
 		
 		while(!finished){
 		
-			System.out.print(prompt);
+			//System.out.print(prompt);
 			rawInput = sc.nextLine();
 			
 			history.add(rawInput);
