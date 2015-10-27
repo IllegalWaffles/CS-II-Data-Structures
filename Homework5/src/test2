@@ -1,0 +1,28 @@
+mkdir aa
+cd aa
+mkdir ab
+cd ab
+mkdir ac
+cd
+mkdir ba
+cd ba
+mkdir bb
+cd bb
+mkdir bc
+cd
+ls -R
+cd aa/ab
+pwd
+cd
+cd ba/bb/bc
+pwd
+cd
+cd ba
+cd bb/bc
+pwd
+cd ..
+pwd
+cd 
+cd ..
+pwd
+logout
