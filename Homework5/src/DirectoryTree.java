@@ -359,16 +359,69 @@ public class DirectoryTree {
 	 * Removes a node from the tree. 
 	 * 
 	 * <dt><b>Preconditions:</b><dd>
-	 * 		'name' is a valid name
+	 * 		'path' is a valid name
+	 * 		'path' references an absolute path
 	 * 
-	 * @param name
-	 * 		the name to remove
+	 * <dt><b>Postconditions:</b><dd>
+	 * 		the node referenced by 'path' and all of its subnodes have been removed from the tree
+	 * 
+	 * @param path
+	 * 		the path of the node to delete
 	 */
-	public void remove(String name) throws IllegalArgumentException, NotADirectoryException
+	public void remove(String path) throws NotADirectoryException, IllegalArgumentException
 	{
 		
+		DirectoryNode saved = cursor;
+		
+		//An array containing each next directory
+		String parsedInput[] = path.split("/");
+		
+		//Gets the name of the node to delete
+		String nameToDelete = parsedInput[parsedInput.length-1];
+		
+		//If the user is trying to delete root, throw an exception
+		if(nameToDelete.equals("root"))
+			throw new IllegalArgumentException(nameToDelete+ ": cannot delete root node. That's a little bit like deleting the universe");
+		
+		//Create a new path to enter the node that contains what we want to delete
+		String newPath = "";
+		
+		for(int i = 0; i < parsedInput.length-2; i++)
+		{
+			
+			newPath += parsedInput[i] + "/";
+			
+		}
 		
 		
+		newPath += parsedInput[parsedInput.length-2];
+		
+		//NewPath now has the form root/<path>
+		
+		//Change the cursor into the node to be deleted
+		changeDirectory(newPath);
+		
+		//Saves the children
+		DirectoryNode[] children = cursor.getChildren();
+		
+		for(int i = 0; i < numChildrenPerNode; i++)
+		{
+			//If the child is not null and its name matches
+			if(children[i] != null && children[i].getName().equals(nameToDelete))
+			{
+				//Delete the node
+				children[i] = null;
+				return;//Don't do anything else
+				
+			}
+			
+		}
+		
+		//Resets the cursor
+		cursor = saved;
+		
+		//Otherwise the node wasn't found - throw an exception
+		throw new NotADirectoryException(nameToDelete + ": file/directory not found");
 		
 	}
 	
@@ -385,10 +438,40 @@ public class DirectoryTree {
 	 * @param dest
 	 * 		the destination to move src to
 	 */
-	public void move(String src, String dest)
+	public void move(String src, String dest) throws NotADirectoryException, IllegalArgumentException, FullDirectoryException
 	{
 		
+		String parsedSrc[] = src.split("/");
 		
+		//This is the name of the node that we want to move
+		String nodeToMoveName = parsedSrc[parsedSrc.length-1];
+		System.out.println();
+		
+		//Gets a reference for src
+		DirectoryNode srcReference = root.find(nodeToMoveName).get(0);
+		
+		System.out.println("Found reference for " + src);
+		
+		//Puts the reference into dest
+		changeDirectory(dest);
+		
+		System.out.println("Moved cursor to destination: " + presentWorkingDirectory());
+		
+		try{
+		
+			cursor.addChild(srcReference);
+		
+		}
+		catch(FullDirectoryException e)
+		{
+			
+			throw e;
+			
+		}
+		
+		//Deletes the original reference of src
+		
+		remove(src);
 		
 	}
 	

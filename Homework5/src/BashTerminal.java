@@ -325,6 +325,23 @@ public class BashTerminal {
 				
 				
 			}
+			else if(input[0].equals("rm"))
+			{
+				
+				try{
+				
+					myTree.remove(input[1]);
+					
+				}
+				catch(Exception e)
+				{
+					
+					System.out.println("rm: " + e.getMessage());
+					
+				}
+				
+				
+			}
 			else
 			{
 				//Or the command was not found
