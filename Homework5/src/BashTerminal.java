@@ -22,6 +22,13 @@ import java.util.ArrayList;
 
 public class BashTerminal {
 	
+	/**
+	 * Main running method behind the BashTerminal program. 
+	 * Sets up a tree and the i/o so the user can interact with it.
+	 * 
+	 * @param args
+	 * 		standard input
+	 */
 	public static void main(String args[])
 	{
 		
@@ -295,6 +302,29 @@ public class BashTerminal {
 				}
 				
 			}
+			else if(input[0].equals("mv"))
+			{
+				
+				String src, dest;
+				
+				try{
+				
+					src = input[1];
+					dest = input[2];
+				
+					System.out.println("Moving node " + src + " into " + dest);
+					
+				}
+				catch(ArrayIndexOutOfBoundsException e)
+				{
+				
+					System.out.println("mv: input not recognized");
+				
+				}
+				
+				
+				
+			}
 			else
 			{
 				//Or the command was not found
@@ -344,7 +374,7 @@ public class BashTerminal {
 		else if(cmd.equals("cd"))
 			System.out.println("Changes the current directory\n"
 					+ "Usage:\n"
-					+ " cd [directory] - changes the current directory to 'directory'\n"
+					+ " cd [directory/path] - changes the current directory to 'directory' or 'path', can be relative or absolute\n"
 					+ " cd .. - changes to the parent directory of the current directory\n"
 					+ " cd - changes to the root directory");
 		else if(cmd.equals("mkdir"))

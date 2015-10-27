@@ -308,27 +308,38 @@ public class DirectoryTree {
 	}
 	
 	/**
+	 * Searches the entire tree for a node with
+	 * the name passed in. Prints the path of each node.
+	 * 
+	 * <dt><b>Preconditions:</b><dd>
+	 * 		'name' is a valid node name
+	 * 		'name' exists in this file system
+	 * <dt><b>Postconditions:</b><dd>
+	 * 		Cursor has not moved
 	 * 
 	 * @param name
+	 * 		the node name to look for
 	 * @throws IllegalArgumentException
+	 * 		indicates the node name is invalid
 	 * @throws NotADirectoryException
+	 * 		indicates that no matches were found
 	 */
 	public void find(String name) throws IllegalArgumentException, NotADirectoryException
 	{
-		
-		//Saves the current position of the cursor
-		DirectoryNode saved = cursor;
 		
 		//If the name is invalid, throw an exception
 		if(!isValidName(name))
 			throw new IllegalArgumentException(name + ": Not a valid name");
 		
 		//Finds all matches of the nodes with the name passed in, stores into an array
-		ArrayList<DirectoryNode> matches = cursor.find(name);
+		ArrayList<DirectoryNode> matches = root.find(name);
 		
 		//If no matches were found, throw an exception
 		if(matches.size() == 0)
 			throw new NotADirectoryException(name + ": File not found");
+	
+		//Saves the current position of the cursor
+		DirectoryNode saved = cursor;
 		
 		//Prints the path of each node
 		for(int i = 0; i < matches.size(); i++)
@@ -341,6 +352,43 @@ public class DirectoryTree {
 		
 		DirectoryNode.clearList();
 		cursor = saved;
+		
+	}
+	
+	/**
+	 * Removes a node from the tree. 
+	 * 
+	 * <dt><b>Preconditions:</b><dd>
+	 * 		'name' is a valid name
+	 * 
+	 * @param name
+	 * 		the name to remove
+	 */
+	public void remove(String name) throws IllegalArgumentException, NotADirectoryException
+	{
+		
+		
+		
+		
+	}
+	
+	/**
+	 * Inserts src into dest, and removed the original src in the process.
+	 * 
+	 * <dt><b>Preconditions:</b><dd>
+	 * 		'src' and 'dest' refer only to absolute paths.
+	 * <dt><b>Postconditions:</b><dd>
+	 * 		'dest' now contains 'src'
+	 * 
+	 * @param src
+	 * 		the source node to move
+	 * @param dest
+	 * 		the destination to move src to
+	 */
+	public void move(String src, String dest)
+	{
+		
+		
 		
 	}
 	

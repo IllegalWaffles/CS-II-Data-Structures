@@ -36,8 +36,7 @@ public class DirectoryNode {
 	//The type of this file
 	private boolean isFile;
 	
-	//When the found method is called and an object
-	//match is encountered, this is incremented
+	//When find method is called, this list is updated
 	private static ArrayList<DirectoryNode> nodeMatches = new ArrayList<DirectoryNode>();
 	
 	/**
@@ -71,6 +70,7 @@ public class DirectoryNode {
 	}
 	
 	/**
+	 * Creates a new DirectoryNode with the specifications passed in.
 	 * 
 	 * @param name
 	 * 		the name of this directoryNode
@@ -120,6 +120,14 @@ public class DirectoryNode {
 	 * 		the parent directory of this node
 	 */
 	public DirectoryNode getParent(){return parent;}
+	
+	/**
+	 * Sets this node's parent to newParent
+	 * 
+	 * @param newParent
+	 * 		the new parent to set this node's parent reference to
+	 */
+	public void setParent(DirectoryNode newParent){parent = newParent;}
 	
 	/**
 	 * Returns if this node is a file or directory
@@ -242,6 +250,7 @@ public class DirectoryNode {
 	
 	/**
 	 * Returns a string representation of this object.
+	 * 
 	 * @return
 	 * 		a string representation of this object
 	 */
