@@ -411,14 +411,15 @@ public class DirectoryTree {
 			{
 				//Delete the node
 				children[i] = null;
+				
+				//Reset the cursor
+				cursor = saved;
+				
 				return;//Don't do anything else
 				
 			}
 			
 		}
-		
-		//Resets the cursor
-		cursor = saved;
 		
 		//Otherwise the node wasn't found - throw an exception
 		throw new NotADirectoryException(nameToDelete + ": file/directory not found");
