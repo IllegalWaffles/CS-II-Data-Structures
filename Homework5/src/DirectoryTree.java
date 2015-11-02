@@ -382,6 +382,9 @@ public class DirectoryTree {
 		//If the user is trying to delete root, throw an exception
 		if(nameToDelete.equals("root"))
 			throw new IllegalArgumentException(nameToDelete+ ": cannot delete root node. That's a little bit like deleting the universe");
+		//Otherwise if the path input is not an absolute path, throw an exception
+		else if(parsedInput.length == 1)
+			throw new IllegalArgumentException(path + ": please use an absolute path");
 		
 		//Create a new path to enter the node that contains what we want to delete
 		String newPath = "";
@@ -433,6 +436,7 @@ public class DirectoryTree {
 	 * 		'src' and 'dest' refer only to absolute paths.
 	 * <dt><b>Postconditions:</b><dd>
 	 * 		'dest' now contains 'src'
+	 * 		cursor now references the root
 	 * 
 	 * @param src
 	 * 		the source node to move
@@ -442,21 +446,19 @@ public class DirectoryTree {
 	public void move(String src, String dest) throws NotADirectoryException, IllegalArgumentException, FullDirectoryException
 	{
 		
+		if(src.equals("root"))
+			throw new IllegalArgumentException(src + ": cannot move root directory");
+		
 		String parsedSrc[] = src.split("/");
 		
 		//This is the name of the node that we want to move
 		String nodeToMoveName = parsedSrc[parsedSrc.length-1];
-		System.out.println();
 		
 		//Gets a reference for src
 		DirectoryNode srcReference = root.find(nodeToMoveName).get(0);
 		
-		System.out.println("Found reference for " + src);
-		
 		//Puts the reference into dest
 		changeDirectory(dest);
-		
-		System.out.println("Moved cursor to destination: " + presentWorkingDirectory());
 		
 		try{
 		
@@ -471,8 +473,10 @@ public class DirectoryTree {
 		}
 		
 		//Deletes the original reference of src
-		
 		remove(src);
+		
+		//Takes cursor back to the root
+		cursor = root;
 		
 	}
 	

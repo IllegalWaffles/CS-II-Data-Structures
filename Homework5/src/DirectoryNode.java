@@ -89,6 +89,13 @@ public class DirectoryNode {
 		
 	}
 	
+	public DirectoryNode(DirectoryNode copy)
+	{
+		
+		
+		
+	}
+	
 	/**
 	 * Gets the name of this node.
 	 * 

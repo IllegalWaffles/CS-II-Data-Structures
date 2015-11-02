@@ -312,7 +312,9 @@ public class BashTerminal {
 					src = input[1];
 					dest = input[2];
 				
-					System.out.println("Moving node " + src + " into " + dest);
+					
+					myTree.move(src, dest);
+					
 					
 				}
 				catch(ArrayIndexOutOfBoundsException e)
@@ -321,7 +323,12 @@ public class BashTerminal {
 					System.out.println("mv: input not recognized");
 				
 				}
+				catch(Exception e)
+				{
+					
+					System.out.println("mv: " + e.getMessage());
 				
+				}
 				
 				
 			}
