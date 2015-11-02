@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 public class BashTerminal {
 	
@@ -32,7 +31,8 @@ public class BashTerminal {
 	public static void main(String args[])
 	{
 		
-		ArrayList<String> history = new ArrayList<String>();
+		String[] history = new String[1000];
+		int numHistory = 0;
 		DirectoryTree myTree;
 		Scanner sc = new Scanner(System.in);
 		String user, host, prompt, date, time, rawInput, input[];
@@ -60,6 +60,8 @@ public class BashTerminal {
 		}
 		*/
 		
+		System.out.println("(Type \"help\" to see a list of all usable commands)\n\n");
+		
 		date = dateTime[0];
 		time = dateTime[1].substring(0, dateTime[1].length()-4);
 		
@@ -76,7 +78,7 @@ public class BashTerminal {
 			System.out.print(prompt);
 			rawInput = sc.nextLine();
 			
-			history.add(rawInput);
+			history[numHistory++] = rawInput;
 			
 			input = rawInput.split(" ");
 			
@@ -85,7 +87,6 @@ public class BashTerminal {
 				//Exits the program
 				System.out.println("logout");
 				finished = true;
-				
 			}
 			else if(input[0].equals("echo"))
 			{
@@ -102,7 +103,6 @@ public class BashTerminal {
 			{
 				//Prints the current path
 				System.out.println(myTree.presentWorkingDirectory());
-				
 			}
 			else if(input[0].equals("ls"))
 			{
@@ -113,15 +113,11 @@ public class BashTerminal {
 					{
 						//Prints a recursive listing of the current directory
 						myTree.printDirectoryTree();
-						
-						
 					}
 					else
 					{
-						
 						//If the args passed in were invalid
-						System.out.println("ls: Invalid input: type \"help ls\" for help");
-						
+						System.out.println("ls: Invalid input: type \"help ls\" for help");	
 					}
 					
 				}catch(ArrayIndexOutOfBoundsException e){
@@ -172,16 +168,13 @@ public class BashTerminal {
 				
 					}
 					catch(ArrayIndexOutOfBoundsException e)
-					{
-					
-						System.out.println("mkdir: invalid input: type \"help mkdir\" for help");
-						
+					{	
+						System.out.println("mkdir: invalid input: type \"help mkdir\" for help");	
 					}
 					catch(Exception e)
 					{
 						//Otherwise something else went wrong
 						System.out.println("mkdir: " + e.getMessage());
-					
 					}
 
 				}	
@@ -202,10 +195,8 @@ public class BashTerminal {
 				}
 				catch(ArrayIndexOutOfBoundsException e)
 				{
-					
 					//No arguments were passed in
 					System.out.println("touch: invalid input: type \"help touch\" for help");
-					
 				}
 				catch(Exception e)
 				{
@@ -256,10 +247,9 @@ public class BashTerminal {
 				
 					if(input[1].equals("-c"))
 					{
-					
+						history = new String[1000];
+						numHistory = 0;
 						System.out.println("History cleared");
-						history = new ArrayList<String>();
-						
 					}
 					else throw new IllegalArgumentException(input[1] + ": Invalid input");
 						
@@ -267,15 +257,13 @@ public class BashTerminal {
 				catch(ArrayIndexOutOfBoundsException e)
 				{
 					
-					for(int i = 0; i < history.size(); i++)
-						System.out.println((i+1) + ": " + history.get(i));	
+					for(int i = 0; i < numHistory; i++)
+						System.out.println((i+1) + ": " + history[i]);	
 					
 				}
 				catch(Exception e)
-				{
-					
-					System.out.println("history: " + e.getMessage());
-				
+				{					
+					System.out.println("history: " + e.getMessage());				
 				}
 				
 				
@@ -290,15 +278,11 @@ public class BashTerminal {
 				}
 				catch(ArrayIndexOutOfBoundsException e)
 				{
-					
-					System.out.println("find: invalid input: type \"help find\" for help");
-					
+					System.out.println("find: invalid input: type \"help find\" for help");	
 				}
 				catch(Exception e)
 				{
-					
-					System.out.println("find: " + e.getMessage());
-					
+					System.out.println("find: " + e.getMessage());					
 				}
 				
 			}
@@ -311,23 +295,17 @@ public class BashTerminal {
 				
 					src = input[1];
 					dest = input[2];
-				
 					
 					myTree.move(src, dest);
-					
 					
 				}
 				catch(ArrayIndexOutOfBoundsException e)
 				{
-				
 					System.out.println("mv: input not recognized");
-				
 				}
 				catch(Exception e)
 				{
-					
-					System.out.println("mv: " + e.getMessage());
-				
+					System.out.println("mv: " + e.getMessage());				
 				}
 				
 				
@@ -342,9 +320,7 @@ public class BashTerminal {
 				}
 				catch(Exception e)
 				{
-					
-					System.out.println("rm: " + e.getMessage());
-					
+					System.out.println("rm: " + e.getMessage());	
 				}
 				
 				
@@ -422,15 +398,28 @@ public class BashTerminal {
 			System.out.println("Finds all files with the name given and prints their paths\n"
 					+ "Usage:\n"
 					+ " find [filename] - finds and prints the paths of all files matching this name");
+		else if(cmd.equals("rm"))
+			System.out.println("Removes the specified directory or file"
+					+ "Usage:\n"
+					+ " rm <absolute path> - removes the node at the path given");
+		else if(cmd.equals("mv"))
+			System.out.println("Moves the given node to the given destination directory\n"
+					+ " mv <absolute path to node> <absolute path to destination>");
 		else if(cmd.equals("GENERIC"))
 			System.out.println("Available commands:\n"
 					+ " pwd - prints the path of the current working directory\n"
+					+ " echo - prints whatever arguments are passed in after echo\n"
+					+ " history - prints the history of the current session\n"
 					+ " ls - prints the contents of the current directory\n"
 					+ " cd - changes current directory\n"
 					+ " mkdir - generates a new directory\n"
 					+ " touch - generates a new file\n"
 					+ " clear - clears the console\n"
 					+ " find - finds all instances of the given name\n"
+					+ " rm - removes a given node\n"
+					+ " exit - exits the program\n"
+					+ " mv - moves a node to a different place in the tree\n"
+					+ " logout - logs out of the current session\n"
 					+ " help - prints this message, or type help [command] to find out more about a specific command");
 		else throw new IllegalArgumentException(cmd + ": command not found");
 		

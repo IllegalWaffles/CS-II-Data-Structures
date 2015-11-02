@@ -14,7 +14,7 @@
  * @author Kuba Gasiorowski
  *
  */
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 public class DirectoryTree {
 
@@ -182,7 +182,6 @@ public class DirectoryTree {
 			
 		}
 		
-		
 		cursor = saved;
 		return toReturn;
 		
@@ -204,7 +203,6 @@ public class DirectoryTree {
 	{
 		
 		String toReturn = "";
-		
 		DirectoryNode[] children = cursor.getChildren();
 		
 		for(int i=0; i < children.length; i++)
@@ -212,8 +210,6 @@ public class DirectoryTree {
 				toReturn += children[i].getName() + " ";
 		
 		return toReturn.trim();
-		
-		
 		
 	}
 	
@@ -252,16 +248,16 @@ public class DirectoryTree {
 	public void makeDirectory(String name) throws IllegalArgumentException, FullDirectoryException
 	{
 		
-		if(!isValidName(name))
+		if(!isValidName(name) || name.equals("root"))
 			throw new IllegalArgumentException(name + ": Invalid directory name");
-		
+			
 		try
 		{
 			cursor.addChild(new DirectoryNode(name, numChildrenPerNode, DirectoryNode.DIRECTORY, cursor));
 		}
 		catch(NotADirectoryException e)
 		{
-			System.out.println("Error: selected node is not a directory. How did you accomplish this?");
+			System.out.println("Error: selected node is not a directory. How did you even accomplish this?");
 		}
 		catch(FullDirectoryException e)
 		{
@@ -298,7 +294,7 @@ public class DirectoryTree {
 		}
 		catch(NotADirectoryException e)
 		{
-			System.out.println("Error: selected node is not a directory. How did you accomplish this?");	
+			System.out.println("Error: selected node is not a directory. How did you even accomplish this?");	
 		}
 		catch(FullDirectoryException e)
 		{
@@ -332,20 +328,25 @@ public class DirectoryTree {
 			throw new IllegalArgumentException(name + ": Not a valid name");
 		
 		//Finds all matches of the nodes with the name passed in, stores into an array
-		ArrayList<DirectoryNode> matches = root.find(name);
+		DirectoryNode[] matches = root.find(name);
+		
+		//Count the number of matches found
+		int numMatches = 0;
+		while(matches[numMatches] != null)
+			numMatches++;
 		
 		//If no matches were found, throw an exception
-		if(matches.size() == 0)
+		if(numMatches == 0)
 			throw new NotADirectoryException(name + ": File not found");
 	
 		//Saves the current position of the cursor
 		DirectoryNode saved = cursor;
 		
 		//Prints the path of each node
-		for(int i = 0; i < matches.size(); i++)
+		for(int i = 0; i < numMatches; i++)
 		{
 			
-			cursor = matches.get(i);
+			cursor = matches[i];
 			System.out.println(presentWorkingDirectory());
 		
 		}
@@ -371,8 +372,6 @@ public class DirectoryTree {
 	public void remove(String path) throws NotADirectoryException, IllegalArgumentException
 	{
 		
-		DirectoryNode saved = cursor;
-		
 		//An array containing each next directory
 		String parsedInput[] = path.split("/");
 		
@@ -390,12 +389,7 @@ public class DirectoryTree {
 		String newPath = "";
 		
 		for(int i = 0; i < parsedInput.length-2; i++)
-		{
-			
 			newPath += parsedInput[i] + "/";
-			
-		}
-		
 		
 		newPath += parsedInput[parsedInput.length-2];
 		
@@ -407,7 +401,7 @@ public class DirectoryTree {
 		//Saves the children
 		DirectoryNode[] children = cursor.getChildren();
 		
-		for(int i = 0; i < numChildrenPerNode; i++)
+		for(int i = 0; i < children.length; i++)
 		{
 			//If the child is not null and its name matches
 			if(children[i] != null && children[i].getName().equals(nameToDelete))
@@ -415,8 +409,7 @@ public class DirectoryTree {
 				//Delete the node
 				children[i] = null;
 				
-				//Reset the cursor
-				cursor = saved;
+				cursor = root;
 				
 				return;//Don't do anything else
 				
@@ -449,27 +442,58 @@ public class DirectoryTree {
 		if(src.equals("root"))
 			throw new IllegalArgumentException(src + ": cannot move root directory");
 		
+		//Splits the input string into directory nodes names
 		String parsedSrc[] = src.split("/");
 		
 		//This is the name of the node that we want to move
 		String nodeToMoveName = parsedSrc[parsedSrc.length-1];
 		
 		//Gets a reference for src
-		DirectoryNode srcReference = root.find(nodeToMoveName).get(0);
+		DirectoryNode srcReference = null;
+		
+		try{
+			
+			changeDirectory(src);
+			srcReference = cursor;
+		
+		}
+		catch(NotADirectoryException e)
+		{	
+			//If the selected node is not a directory
+			//Get the node before it, and 
+			
+			String newSrcPath = parsedSrc[0];
+			for(int i = 1; i < parsedSrc.length-1; i++)
+				newSrcPath += "/" + parsedSrc[i];
+		
+			changeDirectory(newSrcPath);
+			
+			DirectoryNode[] children = cursor.getChildren();
+			
+			//Searches this directory for the node,
+			//if it exists, set the source reference
+			//equal to it
+			//Otherwise, throw an exception
+			for(int i=0; i < numChildrenPerNode; i++)
+				if(children[i] != null && children[i].getName().equals(nodeToMoveName))
+					srcReference = children[i];
+			
+			if(srcReference == null)
+				throw new NotADirectoryException(nodeToMoveName + ": node not found");
+			
+		}
 		
 		//Puts the reference into dest
 		changeDirectory(dest);
 		
 		try{
-		
-			cursor.addChild(srcReference);
-		
+			cursor.addChild(new DirectoryNode(srcReference.getName(), numChildrenPerNode, srcReference.isFile(), cursor));
+			//SET THE PARENTS OF ALL CHILDREN EQUAL TO THIS NEW NODE ^
+			
 		}
 		catch(FullDirectoryException e)
 		{
-			
-			throw e;
-			
+			throw e;	
 		}
 		
 		//Deletes the original reference of src

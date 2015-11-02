@@ -14,7 +14,7 @@
  *
  */
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 public class DirectoryNode {
 
@@ -37,7 +37,9 @@ public class DirectoryNode {
 	private boolean isFile;
 	
 	//When find method is called, this list is updated
-	private static ArrayList<DirectoryNode> nodeMatches = new ArrayList<DirectoryNode>();
+	public static final int MAX_NUM_MATCHES  = 20;
+	private static DirectoryNode[] nodeMatches = new DirectoryNode[MAX_NUM_MATCHES];
+	private static int matchIndex = 0;
 	
 	/**
 	 * Generates a new DirectoryNode object with the given name.
@@ -86,13 +88,6 @@ public class DirectoryNode {
 		
 		this(name, numChildren, isFile);
 		this.parent = parent;
-		
-	}
-	
-	public DirectoryNode(DirectoryNode copy)
-	{
-		
-		
 		
 	}
 	
@@ -218,7 +213,8 @@ public class DirectoryNode {
 	public static void clearList()
 	{
 		
-		nodeMatches = new ArrayList<DirectoryNode>();
+		nodeMatches = new DirectoryNode[MAX_NUM_MATCHES];
+		matchIndex = 0;
 		
 	}
 	
@@ -235,14 +231,14 @@ public class DirectoryNode {
 	 * 		an arraylist of references to matches in the tree
 	 * 
 	 */
-	public ArrayList<DirectoryNode> find(String name)
+	public DirectoryNode[] find(String name)
 	{
 		
 		if(this.getName().equals(name))
 		{
 			
 			//System.out.println("Instance found. Adding reference to array");
-			nodeMatches.add(this);
+			nodeMatches[matchIndex++] = this;
 			
 		}
 			
