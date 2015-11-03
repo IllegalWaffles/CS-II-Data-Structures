@@ -448,19 +448,44 @@ public class DirectoryTree {
 		//This is the name of the node that we want to move
 		String nodeToMoveName = parsedSrc[parsedSrc.length-1];
 		
-		//Gets a reference for src
-		DirectoryNode srcReference = null;
+		//Holds a reference to the node to be copied, as well as a copy of the node
+		DirectoryNode srcReference = null, nodeCopy;
 		
 		try{
 			
 			changeDirectory(src);
+			
+			System.out.println("Node to move is a directory");
+			
+			System.out.println("Cursor moved to " + src);
+			
 			srcReference = cursor;
 		
+			nodeCopy = new DirectoryNode(
+					srcReference.getName(), //Same name
+					numChildrenPerNode, 	//Same num of children per node
+					srcReference.isFile(), 	//Same node type
+					null					//No parent - to be set later
+					);
+			
+			System.out.println("Node at " + src + " (" + srcReference + ") copied into " + nodeCopy);
+			
+			for(int i = 0; i < numChildrenPerNode; i++)
+				if(srcReference.getChildren()[i] != null)
+				{
+					
+					System.out.println("Child found at position " + i);
+					System.out.println("Child has a current parent of " + srcReference.getChildren()[i].getParent());
+					srcReference.getChildren()[i].setParent(nodeCopy);
+					System.out.println("Child " + srcReference.getChildren()[i] + " assigned parent of " + nodeCopy);
+					
+				}
+			
 		}
 		catch(NotADirectoryException e)
 		{	
 			//If the selected node is not a directory
-			//Get the node before it, and 
+			//Get the node before it, and enter that directory
 			
 			String newSrcPath = parsedSrc[0];
 			for(int i = 1; i < parsedSrc.length-1; i++)
@@ -481,23 +506,38 @@ public class DirectoryTree {
 			if(srcReference == null)
 				throw new NotADirectoryException(nodeToMoveName + ": node not found");
 			
+			nodeCopy = new DirectoryNode(
+					srcReference.getName(),	//Same name
+					numChildrenPerNode, 	//Same num of children per node
+					srcReference.isFile(), 	//Same node type
+					null					//No parent - to be set later
+					);
+			
 		}
 		
 		//Puts the reference into dest
 		changeDirectory(dest);
 		
-		try{
-			cursor.addChild(new DirectoryNode(srcReference.getName(), numChildrenPerNode, srcReference.isFile(), cursor));
-			//SET THE PARENTS OF ALL CHILDREN EQUAL TO THIS NEW NODE ^
+		System.out.println("Moved to dest: " + dest);
+		System.out.println("Cursor now references " + cursor);
+		
+		try
+		{
+			cursor.addChild(nodeCopy);
+			System.out.println(nodeCopy + " added to children of " + cursor);
+			nodeCopy.setParent(cursor);
+			System.out.println(cursor + " set as parent of " + nodeCopy);
 			
 		}
 		catch(FullDirectoryException e)
 		{
-			throw e;	
+			throw e;
 		}
 		
 		//Deletes the original reference of src
 		remove(src);
+		
+		System.out.println("Node at path " + src + " removed");
 		
 		//Takes cursor back to the root
 		cursor = root;

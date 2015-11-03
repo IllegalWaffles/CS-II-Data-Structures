@@ -1,28 +1,11 @@
-mkdir aa
-cd aa
-mkdir ab
-cd ab
-mkdir ac
-cd
-mkdir ba
-cd ba
-mkdir bb
-cd bb
-mkdir bc
+mkdir a
+mkdir b
+cd a
+mkdir c
+cd c
+touch file1
 cd
 ls -R
-cd aa/ab
-pwd
-cd
-cd ba/bb/bc
-pwd
-cd
-cd ba
-cd bb/bc
-pwd
-cd ..
-pwd
-cd 
-cd ..
-pwd
+mv root/a root/b
+ls -R
 logout
