@@ -9,13 +9,11 @@
  * Represents a directory tree. 
  * Can be navigated similarly to
  * a BASH prompt. Acts similarly
- * to a BASH prompt.
+ * to a BASH file system.
  * 
  * @author Kuba Gasiorowski
  *
  */
-//import java.util.ArrayList;
-
 public class DirectoryTree {
 
 	//The root of the whole tree
@@ -74,19 +72,6 @@ public class DirectoryTree {
 	public void changeDirectory(String name) throws NotADirectoryException
 	{
 	
-		/* 
-		 * Algorithm:
-		 * Parse input
-		 * if(input[0].equals("root"))
-		 * 		cursor == root
-		 * 		remove input[0], shift everything after down
-		 * 		
-		 * loops through each next string
-		 * 		attempts to change directory to this
-		 * 		if not directory or does not exist throw exception
-		 * 
-		 */
-		
 		if(name.equals(".."))
 		{
 			
@@ -107,7 +92,7 @@ public class DirectoryTree {
 
 				String[] temp = new String[parsedInput.length-1];
 
-				cursor = root;
+				resetCursor();
 
 				for(int i = 0; i < parsedInput.length-1;i++)
 					temp[i] = parsedInput[i+1];
@@ -409,7 +394,7 @@ public class DirectoryTree {
 				//Delete the node
 				children[i] = null;
 				
-				cursor = root;
+				resetCursor();
 				
 				return;//Don't do anything else
 				
@@ -453,11 +438,8 @@ public class DirectoryTree {
 		
 		try{
 			
+			//Changes directory to the node we need to move
 			changeDirectory(src);
-			
-			System.out.println("Node to move is a directory");
-			
-			System.out.println("Cursor moved to " + src);
 			
 			srcReference = cursor;
 		
@@ -468,16 +450,11 @@ public class DirectoryTree {
 					null					//No parent - to be set later
 					);
 			
-			System.out.println("Node at " + src + " (" + srcReference + ") copied into " + nodeCopy);
-			
 			for(int i = 0; i < numChildrenPerNode; i++)
 				if(srcReference.getChildren()[i] != null)
 				{
 					
-					System.out.println("Child found at position " + i);
-					System.out.println("Child has a current parent of " + srcReference.getChildren()[i].getParent());
 					srcReference.getChildren()[i].setParent(nodeCopy);
-					System.out.println("Child " + srcReference.getChildren()[i] + " assigned parent of " + nodeCopy);
 					
 				}
 			
@@ -518,15 +495,10 @@ public class DirectoryTree {
 		//Puts the reference into dest
 		changeDirectory(dest);
 		
-		System.out.println("Moved to dest: " + dest);
-		System.out.println("Cursor now references " + cursor);
-		
 		try
 		{
 			cursor.addChild(nodeCopy);
-			System.out.println(nodeCopy + " added to children of " + cursor);
 			nodeCopy.setParent(cursor);
-			System.out.println(cursor + " set as parent of " + nodeCopy);
 			
 		}
 		catch(FullDirectoryException e)
@@ -540,7 +512,7 @@ public class DirectoryTree {
 		System.out.println("Node at path " + src + " removed");
 		
 		//Takes cursor back to the root
-		cursor = root;
+		resetCursor();
 		
 	}
 	

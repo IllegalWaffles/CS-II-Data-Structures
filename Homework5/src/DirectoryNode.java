@@ -13,9 +13,6 @@
  * @author Kuba Gasiorowski
  *
  */
-
-//import java.util.ArrayList;
-
 public class DirectoryNode {
 
 	//In order to simplify how this system works
@@ -222,13 +219,13 @@ public class DirectoryNode {
 	 * Finds the node with the name 'name' in
 	 * this node and all of its subnodes. 
 	 * 
-	 * Returns an arraylist of matches at the 
+	 * Returns an array of matches at the 
 	 * end of the recursive call.
 	 * 
 	 * @param name
 	 * 		the name to search for
 	 * @return
-	 * 		an arraylist of references to matches in the tree
+	 * 		an array of references to matches in the tree
 	 * 
 	 */
 	public DirectoryNode[] find(String name)

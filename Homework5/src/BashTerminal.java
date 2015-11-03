@@ -46,7 +46,7 @@ public class BashTerminal {
 	 	 * from console will suffice.
 		 */
 		
-		
+		/*
 		try{
 			
 			sc = new Scanner(new File("src/test2"));
@@ -58,6 +58,7 @@ public class BashTerminal {
 			System.out.println("File not found");
 			
 		}
+		*/
 		
 		System.out.println("(Type \"help\" to see a list of all usable commands)\n");
 		
@@ -65,7 +66,7 @@ public class BashTerminal {
 		time = dateTime[1].substring(0, dateTime[1].length()-4);
 		
 		user = "109776237";
-		host = "kuba.laptop";
+		host = "local";
 		
 		myTree = new DirectoryTree();
 		
@@ -74,7 +75,7 @@ public class BashTerminal {
 		
 		while(!finished){
 		
-			//System.out.print(prompt);
+			System.out.print(prompt);
 			rawInput = sc.nextLine();
 			
 			history[numHistory++] = rawInput;
