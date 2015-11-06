@@ -24,17 +24,17 @@ public class DirectoryNode {
 	//Used when printing a recursive directory listing
 	private static int numTabs = 0;
 	
-	//The name of this node. The root is always called "/"
+	//The name of this node. The root is always called "root"
 	private String name;
 	
-	//The children of this node, as well as a reference to the node's parent
-	private DirectoryNode children[], parent;
+	//The children of this node
+	private DirectoryNode children[];
 	
 	//The type of this file
 	private boolean isFile;
 	
-	//When find method is called, this list is updated
-	public static final int MAX_NUM_MATCHES  = 20;
+	//These fields are used when the find method is called
+	private static final int MAX_NUM_MATCHES  = 20;
 	private static DirectoryNode[] nodeMatches = new DirectoryNode[MAX_NUM_MATCHES];
 	private static int matchIndex = 0;
 	
@@ -69,26 +69,6 @@ public class DirectoryNode {
 	}
 	
 	/**
-	 * Creates a new DirectoryNode with the specifications passed in.
-	 * 
-	 * @param name
-	 * 		the name of this directoryNode
-	 * @param isFile
-	 * 		the type of this directoryNode
-	 * @param parent
-	 * 		the parent of this directoryNode,
-	 * 		null iff this object is the root 
-	 * 		of a tree
-	 */
-	public DirectoryNode(String name, int numChildren, boolean isFile, DirectoryNode parent)
-	{
-		
-		this(name, numChildren, isFile);
-		this.parent = parent;
-		
-	}
-	
-	/**
 	 * Gets the name of this node.
 	 * 
 	 * @return
@@ -111,22 +91,6 @@ public class DirectoryNode {
 	 * 		the children of this node
 	 */
 	public DirectoryNode[] getChildren(){return children;}
-	
-	/**
-	 * Gets the parent directory associated with this node
-	 * 
-	 * @return
-	 * 		the parent directory of this node
-	 */
-	public DirectoryNode getParent(){return parent;}
-	
-	/**
-	 * Sets this node's parent to newParent
-	 * 
-	 * @param newParent
-	 * 		the new parent to set this node's parent reference to
-	 */
-	public void setParent(DirectoryNode newParent){parent = newParent;}
 	
 	/**
 	 * Returns if this node is a file or directory

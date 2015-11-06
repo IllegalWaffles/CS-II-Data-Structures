@@ -25,6 +25,9 @@ public class DirectoryTree {
 	//The number of children per node this tree may have
 	private final int numChildrenPerNode = 10;
 	
+	//The current path of the tree. Is updated whenever the directory is changed.
+	private String path;
+	
 	/**
 	 * Creates a new empty directory tree. 
 	 * Initializes a final node as the root.
@@ -36,8 +39,9 @@ public class DirectoryTree {
 	public DirectoryTree()
 	{
 		
-		root = new DirectoryNode("root", numChildrenPerNode, DirectoryNode.DIRECTORY, null);
+		root = new DirectoryNode("root", numChildrenPerNode, DirectoryNode.DIRECTORY);
 		cursor = root;
+		path = "root";
 		
 	}
 	/**
@@ -52,6 +56,7 @@ public class DirectoryTree {
 	{
 		
 		cursor = root;
+		path = "root";
 		
 	}
 	
@@ -78,8 +83,17 @@ public class DirectoryTree {
 			if(cursor == root)
 				throw new NotADirectoryException("root: Already in root directory");
 			else
-				cursor = cursor.getParent();
-			
+			{
+				
+				//Remove last directory from path
+				//Change to this new path
+				
+				
+				path = path.substring(0, path.lastIndexOf('/'));
+				changeDirectory(path);
+				
+				
+			}
 		}
 		else
 		{
@@ -123,6 +137,7 @@ public class DirectoryTree {
 						else
 						{
 							cursor = children[j];
+							path += "/" + cursor.getName();
 							break;
 						}
 
@@ -155,21 +170,7 @@ public class DirectoryTree {
 	public String presentWorkingDirectory()
 	{
 		
-		DirectoryNode saved = cursor;
-		
-		String toReturn = cursor.getName();
-		
-		while(cursor.getParent() != null)
-		{
-		
-			cursor = cursor.getParent();
-			toReturn = cursor.getName() + "/" + toReturn;
-			
-		}
-		
-		cursor = saved;
-		return toReturn;
-		
+		return path;
 		
 	}
 	
@@ -238,7 +239,7 @@ public class DirectoryTree {
 			
 		try
 		{
-			cursor.addChild(new DirectoryNode(name, numChildrenPerNode, DirectoryNode.DIRECTORY, cursor));
+			cursor.addChild(new DirectoryNode(name, numChildrenPerNode, DirectoryNode.DIRECTORY));
 		}
 		catch(NotADirectoryException e)
 		{
@@ -275,7 +276,7 @@ public class DirectoryTree {
 		
 		try
 		{
-			cursor.addChild(new DirectoryNode(name, numChildrenPerNode, DirectoryNode.FILE, cursor));
+			cursor.addChild(new DirectoryNode(name, numChildrenPerNode, DirectoryNode.FILE));
 		}
 		catch(NotADirectoryException e)
 		{
@@ -350,6 +351,7 @@ public class DirectoryTree {
 	 * 
 	 * <dt><b>Postconditions:</b><dd>
 	 * 		the node referenced by 'path' and all of its subnodes have been removed from the tree
+	 * 		the cursor is at the root position   
 	 * 
 	 * @param path
 	 * 		the path of the node to delete
@@ -360,7 +362,8 @@ public class DirectoryTree {
 		//An array containing each next directory
 		String parsedInput[] = path.split("/");
 		
-		//Gets the name of the node to delete
+		//Gets the name of the node to delete,
+		//which is the last node name of the string
 		String nameToDelete = parsedInput[parsedInput.length-1];
 		
 		//If the user is trying to delete root, throw an exception
@@ -378,7 +381,7 @@ public class DirectoryTree {
 		
 		newPath += parsedInput[parsedInput.length-2];
 		
-		//NewPath now has the form root/<path>
+		//NewPath now has the form root/<path to parent of node to delete>
 		
 		//Change the cursor into the node to be deleted
 		changeDirectory(newPath);
@@ -404,115 +407,6 @@ public class DirectoryTree {
 		
 		//Otherwise the node wasn't found - throw an exception
 		throw new NotADirectoryException(nameToDelete + ": file/directory not found");
-		
-	}
-	
-	/**
-	 * Inserts src into dest, and removed the original src in the process.
-	 * 
-	 * <dt><b>Preconditions:</b><dd>
-	 * 		'src' and 'dest' refer only to absolute paths.
-	 * <dt><b>Postconditions:</b><dd>
-	 * 		'dest' now contains 'src'
-	 * 		cursor now references the root
-	 * 
-	 * @param src
-	 * 		the source node to move
-	 * @param dest
-	 * 		the destination to move src to
-	 */
-	public void move(String src, String dest) throws NotADirectoryException, IllegalArgumentException, FullDirectoryException
-	{
-		
-		if(src.equals("root"))
-			throw new IllegalArgumentException(src + ": cannot move root directory");
-		
-		//Splits the input string into directory nodes names
-		String parsedSrc[] = src.split("/");
-		
-		//This is the name of the node that we want to move
-		String nodeToMoveName = parsedSrc[parsedSrc.length-1];
-		
-		//Holds a reference to the node to be copied, as well as a copy of the node
-		DirectoryNode srcReference = null, nodeCopy;
-		
-		try{
-			
-			//Changes directory to the node we need to move
-			changeDirectory(src);
-			
-			srcReference = cursor;
-		
-			nodeCopy = new DirectoryNode(
-					srcReference.getName(), //Same name
-					numChildrenPerNode, 	//Same num of children per node
-					srcReference.isFile(), 	//Same node type
-					null					//No parent - to be set later
-					);
-			
-			for(int i = 0; i < numChildrenPerNode; i++)
-				if(srcReference.getChildren()[i] != null)
-				{
-					
-					srcReference.getChildren()[i].setParent(nodeCopy);
-					
-				}
-			
-		}
-		catch(NotADirectoryException e)
-		{	
-			//If the selected node is not a directory
-			//Get the node before it, and enter that directory
-			
-			String newSrcPath = parsedSrc[0];
-			for(int i = 1; i < parsedSrc.length-1; i++)
-				newSrcPath += "/" + parsedSrc[i];
-		
-			changeDirectory(newSrcPath);
-			
-			DirectoryNode[] children = cursor.getChildren();
-			
-			//Searches this directory for the node,
-			//if it exists, set the source reference
-			//equal to it
-			//Otherwise, throw an exception
-			for(int i=0; i < numChildrenPerNode; i++)
-				if(children[i] != null && children[i].getName().equals(nodeToMoveName))
-					srcReference = children[i];
-			
-			if(srcReference == null)
-				throw new NotADirectoryException(nodeToMoveName + ": node not found");
-			
-			nodeCopy = new DirectoryNode(
-					srcReference.getName(),	//Same name
-					numChildrenPerNode, 	//Same num of children per node
-					srcReference.isFile(), 	//Same node type
-					null					//No parent - to be set later
-					);
-			
-		}
-		
-		//Puts the reference into dest
-		changeDirectory(dest);
-		
-		try
-		{
-			cursor.addChild(nodeCopy);
-			nodeCopy.setParent(cursor);
-			
-		}
-		catch(FullDirectoryException e)
-		{
-			throw e;
-		}
-		
-		//Deletes the original reference of src
-		remove(src);
-		
-		System.out.println("Node at path " + src + " removed");
-		
-		//Takes cursor back to the root
-		resetCursor();
 		
 	}
 	

@@ -286,43 +286,26 @@ public class BashTerminal {
 				}
 				
 			}
-			else if(input[0].equals("mv"))
-			{
-				
-				String src, dest;
-				
-				try{
-				
-					src = input[1];
-					dest = input[2];
-					
-					myTree.move(src, dest);
-					
-				}
-				catch(ArrayIndexOutOfBoundsException e)
-				{
-					System.out.println("mv: input not recognized");
-				}
-				catch(NotADirectoryException e){}
-				catch(FullDirectoryException e){}
-				//catch(Exception e)
-				//{
-					//System.out.println("mv: " + e);				
-				//}
-				
-				
-			}
 			else if(input[0].equals("rm"))
 			{
 				
-				try{
-				
+				try
+				{
+					
 					myTree.remove(input[1]);
+				
+				}
+				catch(ArrayIndexOutOfBoundsException e)
+				{
+					
+					System.out.println("rm: invalid input: type \"help rm\" for help");
 					
 				}
 				catch(Exception e)
 				{
-					System.out.println("rm: " + e.getMessage());	
+					
+					System.out.println("rm: " + e.getMessage());
+					
 				}
 				
 				
@@ -404,9 +387,6 @@ public class BashTerminal {
 			System.out.println("Removes the specified directory or file"
 					+ "Usage:\n"
 					+ " rm <absolute path> - removes the node at the path given");
-		else if(cmd.equals("mv"))
-			System.out.println("Moves the given node to the given destination directory\n"
-					+ " mv <absolute path to node> <absolute path to destination>");
 		else if(cmd.equals("GENERIC"))
 			System.out.println("Available commands:\n"
 					+ " pwd - prints the path of the current working directory\n"
@@ -420,7 +400,6 @@ public class BashTerminal {
 					+ " find - finds all instances of the given name\n"
 					+ " rm - removes a given node\n"
 					+ " exit - exits the program\n"
-					+ " mv - moves a node to a different place in the tree\n"
 					+ " logout - logs out of the current session\n"
 					+ " help - prints this message, or type help [command] to find out more about a specific command");
 		else throw new IllegalArgumentException(cmd + ": command not found");
