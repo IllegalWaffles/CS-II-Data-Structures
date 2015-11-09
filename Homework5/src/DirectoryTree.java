@@ -332,6 +332,7 @@ public class DirectoryTree {
 		for(int i = 0; i < numMatches; i++)
 		{
 			
+			//Fix this
 			cursor = matches[i];
 			System.out.println(presentWorkingDirectory());
 		
