@@ -3,17 +3,22 @@ import java.util.Scanner;
 
 public class AuctionSystem implements Serializable {
 
-	private AuctionTable myTable;
-	private String username;
+	private static AuctionTable myTable;
+	private static String username;
 	
 	public static void main(String[] args)
 	{
 		
+		myTable = new AuctionTable();
 		boolean finished = false;
 		Scanner sc = new Scanner(System.in);
 		String input, parsedInput[];
 		
-		System.out.println("(D) - Import Data from URL\n"
+		System.out.println("LOGIN - Enter your username: ");
+		
+		username = sc.nextLine();	
+		
+		System.out.println("\n\n(D) - Import Data from URL\n"
 				+ "(A) - Create a New Auction\n"
 				+ "(B) - Bid on an Item\n"
 				+ "(I) - Get Info on Auction\n"
@@ -78,6 +83,9 @@ public class AuctionSystem implements Serializable {
 				System.out.println("Input not recognized. Try again");
 				
 			}
+			
+			sc.close();
+			
 		}
 		
 	}
