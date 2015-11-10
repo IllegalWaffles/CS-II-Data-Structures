@@ -1,6 +1,6 @@
 import java.io.Serializable;
 import big.data.*;
-import java.util.Hashtable;;
+import java.util.Hashtable;
 
 /**
  * Kuba Gasiorowski, kgasiorowski, 109776237, kuba.gasiorowski@sbu.edu
@@ -18,6 +18,8 @@ import java.util.Hashtable;;
  */
 public class AuctionTable implements Serializable {
 
+	Hashtable<String, Auction> myTable;
+	
 	/**
 	 * Takes a url and builds a table of auctions
 	 * based upon to input.
@@ -86,7 +88,7 @@ public class AuctionTable implements Serializable {
 	public boolean put(String auctionID, Auction auction)
 	{
 		
-		return false;
+		return myTable.put(auctionID, auction) != null;
 		
 	}
 	
@@ -111,7 +113,9 @@ public class AuctionTable implements Serializable {
 	 * in the Hashmap.
 	 * 
 	 * @param numHours
+	 * 		number of hours to be passed
 	 * @throws IllegalArgumentException
+	 * 		indicates an illegal argument (i.e. negative time)
 	 */
 	public void letTimePass(int numHours) throws IllegalArgumentException
 	{
