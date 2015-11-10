@@ -41,6 +41,9 @@ public class Auction implements Serializable {
 		
 		timeRemaining -= time;
 		
+		if(timeRemaining < 0)
+			timeRemaining = 0;
+		
 	}
 	
 	/**
@@ -56,10 +59,12 @@ public class Auction implements Serializable {
 			throw new ClosedAuctionException("Auction is closed");
 		
 		if(bidAmt > currentBid)
+		{
+		
 			currentBid = bidAmt;
+			buyerName = bidderName;
 		
-		buyerName = bidderName;
-		
+		}
 		
 	}
 	
@@ -68,7 +73,6 @@ public class Auction implements Serializable {
 	 */
 	public String toString()
 	{
-		
 		
 		
 		return "";

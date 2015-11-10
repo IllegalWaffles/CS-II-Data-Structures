@@ -41,6 +41,13 @@ public class AuctionSystem implements Serializable {
 				finished = true;
 				
 			}
+			else if(parsedInput[0].equals("D"))
+			{
+				
+				System.out.println("URL: ");
+				AuctionTable.buildFromUrl(sc.nextLine());
+				
+			}
 			else if(parsedInput[0].equals("A"))
 			{
 				
@@ -84,9 +91,9 @@ public class AuctionSystem implements Serializable {
 				
 			}
 			
-			sc.close();
-			
 		}
+		
+		sc.close();
 		
 	}
 	
