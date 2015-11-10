@@ -2,8 +2,34 @@ import java.io.Serializable;
 import big.data.*;
 import java.util.Hashtable;;
 
+/**
+ * Kuba Gasiorowski, kgasiorowski, 109776237, kuba.gasiorowski@sbu.edu
+ * 
+ * Homework #6
+ * Recitation 03
+ * Rec TA: Ka Wing Fong
+ * Grading Ta: Zhichuang Sun
+ * 
+ * This class represents a table of auctions.
+ * Utilizes a java-API Hashtable.
+ * 
+ * @author Kuba Gasiorowski
+ *
+ */
 public class AuctionTable implements Serializable {
 
+	/**
+	 * Takes a url and builds a table of auctions
+	 * based upon to input.
+	 * 
+	 * @param URL
+	 * 		the url of the source of data
+	 * @return
+	 * 		a new table of auctions corresponding to the
+	 * 		data found at "URL" 
+	 * @throws IllegalArgumentException
+	 * 		indicates the URL is malformed or contains no data
+	 */
 	public static AuctionTable buildFromUrl(String URL) throws IllegalArgumentException
 	{
 	
@@ -38,25 +64,25 @@ public class AuctionTable implements Serializable {
 	
 		AuctionTable newTable = new AuctionTable();
 		
-		try{
-		
 		DataSource ds = DataSource.connect(URL).load();
 		String input = ds.fetchString("listing/seller_info/seller_name");
 		
 		System.out.println(input);
 		
-		}
-		catch(Exception e)
-		{
-			
-			System.out.println(e.getMessage());
-			
-		}
-		
 		return newTable;
 		
 	}
 	
+	/**
+	 * Inserts a new auction into the Hashmap.
+	 * 
+	 * @param auctionID
+	 * 		the ID of the auction to insert
+	 * @param auction
+	 * 		the auction to insert
+	 * @return
+	 * 		true if the auction could be inserted; false otherwise
+	 */
 	public boolean put(String auctionID, Auction auction)
 	{
 		
@@ -64,6 +90,15 @@ public class AuctionTable implements Serializable {
 		
 	}
 	
+	/**
+	 * Gets the auction with the matching auctionID.
+	 * 
+	 * @param auctionID
+	 * 		the auctionID of the auction to find
+	 * 		
+	 * @return
+	 * 		the auction with auctionID, null if the auction does not exist
+	 */
 	public Auction get(String auctionID)
 	{
 		
@@ -71,6 +106,13 @@ public class AuctionTable implements Serializable {
 		
 	}
 	
+	/**
+	 * Passes 'numHours' hours for all auctions
+	 * in the Hashmap.
+	 * 
+	 * @param numHours
+	 * @throws IllegalArgumentException
+	 */
 	public void letTimePass(int numHours) throws IllegalArgumentException
 	{
 		
@@ -80,6 +122,9 @@ public class AuctionTable implements Serializable {
 		
 	}
 	
+	/**
+	 * Prints a neatly formatted representation of this AuctionTable.
+	 */
 	public void printTable()
 	{
 		

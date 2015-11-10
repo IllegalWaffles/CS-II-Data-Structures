@@ -1,11 +1,33 @@
 import java.io.Serializable;
 import java.util.Scanner;
 
+/**
+ * Kuba Gasiorowski, kgasiorowski, 109776237, kuba.gasiorowski@sbu.edu
+ * 
+ * Homework #6
+ * Recitation 03
+ * Rec TA: Ka Wing Fong
+ * Grading Ta: Zhichuang Sun
+ * 
+ * Main driver class behind this program.
+ * Allows the user to interact and manipulate
+ * an AuctionTable.
+ * 
+ * @author Kuba Gasiorowski
+ *
+ */
 public class AuctionSystem implements Serializable {
 
 	private static AuctionTable myTable;
 	private static String username;
 	
+	/**
+	 * Main driving method behind this entire program.
+	 * Contains a simple UI so the user can interact
+	 * with the AuctionTable.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args)
 	{
 		
@@ -14,11 +36,11 @@ public class AuctionSystem implements Serializable {
 		Scanner sc = new Scanner(System.in);
 		String input, parsedInput[];
 		
-		System.out.println("LOGIN - Enter your username: ");
+		System.out.print("LOGIN - Enter your username: ");
 		
 		username = sc.nextLine();	
 		
-		System.out.println("\n\n(D) - Import Data from URL\n"
+		System.out.println("\n(D) - Import Data from URL\n"
 				+ "(A) - Create a New Auction\n"
 				+ "(B) - Bid on an Item\n"
 				+ "(I) - Get Info on Auction\n"
@@ -37,14 +59,14 @@ public class AuctionSystem implements Serializable {
 			if(parsedInput[0].equals("Q"))
 			{
 				
-				System.out.println("\nExiting..");
+				System.out.println("Exiting..");
 				finished = true;
 				
 			}
 			else if(parsedInput[0].equals("D"))
 			{
 				
-				System.out.println("URL: ");
+				System.out.print("URL: ");
 				AuctionTable.buildFromUrl(sc.nextLine());
 				
 			}

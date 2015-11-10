@@ -117,3 +117,5 @@ local.properties
 
 .DS_Store
 .recommenders/
+
+*/cache/
