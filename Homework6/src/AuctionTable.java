@@ -142,11 +142,23 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 		
 	}
 	
-	private static int parseTime(String s)
+	public static int parseTime(String s)
 	{
 		
+		int time = 0;
 		
-		return 0;
+		s = s.replaceAll(",", "");
+		s = s.trim();
+		
+		String parsedTime[] = s.split(" ");
+		
+		for(int i = 0; i < parsedTime.length; i++)
+			if(parsedTime[i].equals("days") || parsedTime[i].equals("day"))
+				time += 24 * Integer.parseInt(parsedTime[i-1]);
+			else if(parsedTime[i].equals("hours") || parsedTime[i].equals("hour"))
+				time += Integer.parseInt(parsedTime[i-1]);
+		
+		return time;
 		
 	}
 	

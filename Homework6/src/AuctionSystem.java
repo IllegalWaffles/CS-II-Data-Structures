@@ -31,7 +31,8 @@ public class AuctionSystem implements Serializable {
 	 */
 	public static void main(String[] args)
 	{
-			
+		
+		
 		myTable = new AuctionTable();
 		boolean finished = false;
 		Scanner sc = new Scanner(System.in);
@@ -129,7 +130,10 @@ public class AuctionSystem implements Serializable {
 		}
 		
 		sc.close();
+	
+		
 		
 	}
+	
 	
 }
