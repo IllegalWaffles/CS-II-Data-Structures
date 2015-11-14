@@ -84,6 +84,9 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 		int numAuctions;
 		
 		//Extract the necessary data
+		
+		try{
+		
 		sellerNames = ds.fetchStringArray("listing/seller_info/seller_name");
 		auctionIDs = ds.fetchStringArray("listing/auction_info/id_num");
 		timesRemaining = ds.fetchStringArray("listing/auction_info/time_left");
@@ -109,7 +112,6 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 			//Create auction objects
 			toAdd = new Auction(auctionIDs[i], sellerNames[i], itemInfos[i], parseTime(timesRemaining[i]));
 			
-			
 			try{
 			
 				toAdd.newBid(buyerNames[i], parseCurrencyAmount(highestBids[i]));
@@ -127,6 +129,14 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 			
 		}
 		
+		}
+		catch(DataSourceException e)
+		{
+			
+			throw new IllegalArgumentException("No data found. Possible malformed URL");
+			
+		}
+		
 		//Return
 		return newTable;
 		
@@ -134,7 +144,6 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	
 	private static int parseTime(String s)
 	{
-		
 		
 		
 		return 0;
@@ -217,7 +226,13 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	public void printTable()
 	{
 		
+		System.out.println(" Auction ID |      Bid   |        Seller         |          Buyer          |    Time   |  Item Info\n"
+						 + "===================================================================================================================================\n");
 		
+		Set<String> keySet = this.keySet();
+		
+		for(String s: keySet)
+			System.out.println(get(s));
 		
 		
 	}
