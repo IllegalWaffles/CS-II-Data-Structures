@@ -47,6 +47,15 @@ public class Auction implements Serializable {
 		
 	}
 	
+	public Auction(String auctionID, String sellerName, String itemInfo, int timeRemaining, double currentBid, String buyerName)
+	{
+		
+		this(auctionID, sellerName, itemInfo, timeRemaining);
+		this.currentBid = currentBid;
+		this.buyerName = buyerName;
+		
+	}
+	
 	/**
 	 * Returns the time remaining
 	 * until this auction closes.
