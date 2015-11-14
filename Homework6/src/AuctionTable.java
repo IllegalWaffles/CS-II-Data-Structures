@@ -20,6 +20,16 @@ import java.util.Set;
 public class AuctionTable extends Hashtable<String, Auction> implements Serializable {
 	
 	/**
+	 * Default constructor for AuctionTable
+	 */
+	public AuctionTable()
+	{
+		
+		super();
+		
+	}
+	
+	/**
 	 * Takes a url and builds a table of auctions
 	 * based upon the input.
 	 * 
@@ -36,30 +46,30 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	
 		/*
 		 
-	If we have the URL of the XML file, we can connect to it using the library functions. 
-	First, we must connect() to the URL, then load() the data. Finally, we can fetch() the information.
+		If we have the URL of the XML file, we can connect to it using the library functions. 
+		First, we must connect() to the URL, then load() the data. Finally, we can fetch() the information.
 
-	Sample Code:
+		Sample Code:
 
-	The file <sample_file.xml> contains the following content:
+		The file <sample_file.xml> contains the following content:
 	
-	<root>
-    	<item>
-        	<attr>1</attr>
-    	</item>
-    	<item>
-        	<attr>2</attr>
-    	</item>
-	</root>
+		<root>
+    		<item>
+        		<attr>1</attr>
+    		</item>
+    		<item>
+        		<attr>2</attr>
+    		</item>
+		</root>
 	
-	import big.data.*;
-	DataSource ds = DataSource.connect("sample_file.xml").load();
-	String str = ds.fetchString("item/attr");
-	// normally, we can extract a single string data in the path item/attr, but we have multiple values in our case. Instead,
-	we should do the following:
-	String[] myList = ds.fetchStringArray("item/attr");
-	You will mostly use fetchStringArray() in this assignment. Sometimes, the information on the XML may not be complete. 
-	You might find that your fetch will return an empty string (i.e. ""). In that case, you can replace it with the string: "N/A"
+		import big.data.*;
+		DataSource ds = DataSource.connect("sample_file.xml").load();
+		String str = ds.fetchString("item/attr");
+		// normally, we can extract a single string data in the path item/attr, but we have multiple values in our case. Instead,
+		we should do the following:
+		String[] myList = ds.fetchStringArray("item/attr");
+		You will mostly use fetchStringArray() in this assignment. Sometimes, the information on the XML may not be complete. 
+		You might find that your fetch will return an empty string (i.e. ""). In that case, you can replace it with the string: "N/A"
 		 
 		 */
 	
@@ -69,22 +79,74 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 		String sellerNames[], auctionIDs[], itemInfos[], buyerNames[], timesRemaining[], highestBids[];
 		String infoMemory[], infoHD[], infoCPU[];
 		
+		Auction toAdd;
+		
+		int numAuctions;
+		
 		//Extract the necessary data
 		sellerNames = ds.fetchStringArray("listing/seller_info/seller_name");
 		auctionIDs = ds.fetchStringArray("listing/auction_info/id_num");
+		timesRemaining = ds.fetchStringArray("listing/auction_info/time_left");
 		
+		buyerNames = ds.fetchStringArray("listing/auction_info/high_bidder/bidder_name");
+		highestBids = ds.fetchStringArray("listing/auction_info/current_bid");
 		
+		infoMemory = ds.fetchStringArray("listing/item_info/memory");
+		infoHD = ds.fetchStringArray("listing/item_info/hard_drive");
+		infoCPU = ds.fetchStringArray("listing/item_info/cpu");
 		
 		buyerNames = ds.fetchStringArray("listing/auction_info/high_bidder/bidder_name");
 		
-		//Organize the data
+		numAuctions = auctionIDs.length;
+		itemInfos = new String[numAuctions];
 		
-		//Create auction objects
-		
-		//Add them to the AuctionTable
+		for(int i = 0; i < numAuctions; i++)
+		{
+			
+			//Organize the data
+			itemInfos[i] = infoMemory[i] + " - " + infoHD[i] + " - " + infoCPU[i];
+			
+			//Create auction objects
+			toAdd = new Auction(auctionIDs[i], sellerNames[i], itemInfos[i], parseTime(timesRemaining[i]));
+			
+			
+			try{
+			
+				toAdd.newBid(buyerNames[i], parseCurrencyAmount(highestBids[i]));
+			
+				//Add them to the AuctionTable
+				newTable.putAuction(auctionIDs[i], toAdd);
+				
+			}
+			catch(ClosedAuctionException e)
+			{
+				
+				System.out.println(" Error: " + e.getMessage() + "\n Auction " + auctionIDs[i] + "not added to table");
+				
+			}
+			
+		}
 		
 		//Return
 		return newTable;
+		
+	}
+	
+	private static int parseTime(String s)
+	{
+		
+		
+		
+		return 0;
+		
+	}
+	
+	private static double parseCurrencyAmount(String s)
+	{
+		
+		
+		
+		return 0;
 		
 	}
 	
@@ -105,7 +167,7 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 		if(this.containsKey(auctionID))
 			throw new IllegalArgumentException("AuctionTable already contains this auctionID");
 		
-		super.put(auctionID, auction);
+		put(auctionID, auction);
 		
 	}
 	
