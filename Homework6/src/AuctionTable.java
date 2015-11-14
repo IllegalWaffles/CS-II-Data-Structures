@@ -1,6 +1,7 @@
 import java.io.Serializable;
 import big.data.*;
 import java.util.Hashtable;
+import java.util.Set;
 
 /**
  * Kuba Gasiorowski, kgasiorowski, 109776237, kuba.gasiorowski@sbu.edu
@@ -16,13 +17,11 @@ import java.util.Hashtable;
  * @author Kuba Gasiorowski
  *
  */
-public class AuctionTable implements Serializable {
-
-	Hashtable<String, Auction> myTable;
+public class AuctionTable extends Hashtable<String, Auction> implements Serializable {
 	
 	/**
 	 * Takes a url and builds a table of auctions
-	 * based upon to input.
+	 * based upon the input.
 	 * 
 	 * @param URL
 	 * 		the url of the source of data
@@ -64,47 +63,64 @@ public class AuctionTable implements Serializable {
 		 
 		 */
 	
+		//Declare the variables we need
 		AuctionTable newTable = new AuctionTable();
-		
 		DataSource ds = DataSource.connect(URL).load();
-		String input = ds.fetchString("listing/seller_info/seller_name");
+		String sellerNames[], auctionIDs[], itemInfos[], buyerNames[], timesRemaining[], highestBids[];
+		String infoMemory[], infoHD[], infoCPU[];
 		
-		System.out.println(input);
+		//Extract the necessary data
+		sellerNames = ds.fetchStringArray("listing/seller_info/seller_name");
+		auctionIDs = ds.fetchStringArray("listing/auction_info/id_num");
 		
+		
+		
+		buyerNames = ds.fetchStringArray("listing/auction_info/high_bidder/bidder_name");
+		
+		//Organize the data
+		
+		//Create auction objects
+		
+		//Add them to the AuctionTable
+		
+		//Return
 		return newTable;
 		
 	}
 	
 	/**
-	 * Inserts a new auction into the Hashmap.
+	 * Adds a new auction into this AuctionTable
 	 * 
 	 * @param auctionID
-	 * 		the ID of the auction to insert
+	 * 		the key of the new auction
 	 * @param auction
-	 * 		the auction to insert
-	 * @return
-	 * 		true if the auction could be inserted; false otherwise
+	 * 		the new auction to insert
+	 * @throws IllegalArgumentException
+	 * 		indicates that the given auction is already contained in this
+	 * 		AuctionTable
 	 */
-	public boolean put(String auctionID, Auction auction)
+	public void putAuction(String auctionID, Auction auction) throws IllegalArgumentException
 	{
 		
-		return myTable.put(auctionID, auction) != null;
+		if(this.containsKey(auctionID))
+			throw new IllegalArgumentException("AuctionTable already contains this auctionID");
+		
+		super.put(auctionID, auction);
 		
 	}
 	
 	/**
-	 * Gets the auction with the matching auctionID.
+	 * Returns the auction with the given auctionId.
 	 * 
 	 * @param auctionID
-	 * 		the auctionID of the auction to find
-	 * 		
+	 * 		the id of the auction to get
 	 * @return
-	 * 		the auction with auctionID, null if the auction does not exist
+	 * 		the auction with the id auctionID
 	 */
-	public Auction get(String auctionID)
+	public Auction getAuction(String auctionID)
 	{
 		
-		return null;
+		return this.get(auctionID);
 		
 	}
 	
@@ -120,9 +136,16 @@ public class AuctionTable implements Serializable {
 	public void letTimePass(int numHours) throws IllegalArgumentException
 	{
 		
+		//If the time to pass is invalid, throw an exception
 		if(numHours < 0)
 			throw new IllegalArgumentException("Cannot pass a negative amount of time");
 		
+		//Gets a list of keys used in this table
+		Set<String> keySet = this.keySet();
+		
+		//Gets each object and operates on it
+		for(String s: keySet)
+			this.getAuction(s).decrementTimeRemaining(numHours);
 		
 	}
 	

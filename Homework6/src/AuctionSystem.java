@@ -27,6 +27,7 @@ public class AuctionSystem implements Serializable {
 	 * with the AuctionTable.
 	 * 
 	 * @param args
+	 * 		standard input arguments
 	 */
 	public static void main(String[] args)
 	{

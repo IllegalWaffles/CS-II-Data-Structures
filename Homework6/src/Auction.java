@@ -27,9 +27,13 @@ public class Auction implements Serializable {
 	 * These aren't set until at least one bidder bids.
 	 * 
 	 * @param auctionID
+	 * 		the id of this auction
 	 * @param sellerName
+	 * 		the name of the seller
 	 * @param itemInfo
+	 * 		the information of the item on sale
 	 * @param timeRemaining
+	 * 		the time remaining for this auction
 	 */
 	public Auction(String auctionID, String sellerName, String itemInfo, int timeRemaining)
 	{
