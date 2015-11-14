@@ -31,7 +31,7 @@ public class AuctionSystem implements Serializable {
 	 */
 	public static void main(String[] args)
 	{
-		
+			
 		myTable = new AuctionTable();
 		boolean finished = false;
 		Scanner sc = new Scanner(System.in);
@@ -42,18 +42,18 @@ public class AuctionSystem implements Serializable {
 		username = sc.nextLine();	
 		
 		System.out.println("\n(D) - Import Data from URL\n"
-				+ "(A) - Create a New Auction\n"
-				+ "(B) - Bid on an Item\n"
-				+ "(I) - Get Info on Auction\n"
-				+ "(P) - Print All Auctions\n"
-				+ "(R) - Remove Expired Auctions\n"
-				+ "(T) - Let Time Pass\n"
-				+ "(Q) - Quit");
+						   + "(A) - Create a New Auction\n"
+						   + "(B) - Bid on an Item\n"
+						   + "(I) - Get Info on Auction\n"
+						   + "(P) - Print All Auctions\n"
+						   + "(R) - Remove Expired Auctions\n"
+						   + "(T) - Let Time Pass\n"
+						   + "(Q) - Quit");
 		
 		while(!finished)
 		{
 			
-			System.out.print(" > ");
+			System.out.print("> ");
 			input = sc.nextLine().toUpperCase();
 			parsedInput = input.split(" ");
 			
@@ -68,8 +68,20 @@ public class AuctionSystem implements Serializable {
 			{
 				
 				System.out.print("URL: ");
-				AuctionTable.buildFromUrl(sc.nextLine());
 				
+				try{
+				
+					myTable = AuctionTable.buildFromUrl(sc.nextLine());
+				
+				}
+				catch(IllegalArgumentException e)
+				{
+					
+					System.out.println(e.getMessage());
+					
+				}
+					
+					
 			}
 			else if(parsedInput[0].equals("A"))
 			{
@@ -92,7 +104,7 @@ public class AuctionSystem implements Serializable {
 			else if(parsedInput[0].equals("P"))
 			{
 				
-				
+				myTable.printTable();
 				
 			}
 			else if(parsedInput[0].equals("R"))
