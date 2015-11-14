@@ -111,13 +111,18 @@ public class AuctionSystem implements Serializable {
 			else if(parsedInput[0].equals("R"))
 			{
 				
-				
+				System.out.println("Removing closed auctions...");
+				myTable.removeClosedAuctions();
+				System.out.println("Done.");
 				
 			}
 			else if(parsedInput[0].equals("T"))
 			{
 				
+				System.out.print("How many hours to pass?\nHours:");
+				int hours = Integer.parseInt(sc.nextLine());
 				
+				myTable.letTimePass(hours);
 				
 			}
 			else
@@ -130,8 +135,6 @@ public class AuctionSystem implements Serializable {
 		}
 		
 		sc.close();
-	
-		
 		
 	}
 	
