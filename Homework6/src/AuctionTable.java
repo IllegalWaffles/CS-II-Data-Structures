@@ -44,35 +44,6 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	public static AuctionTable buildFromUrl(String URL) throws IllegalArgumentException
 	{
 	
-		/*
-		 
-		If we have the URL of the XML file, we can connect to it using the library functions. 
-		First, we must connect() to the URL, then load() the data. Finally, we can fetch() the information.
-
-		Sample Code:
-
-		The file <sample_file.xml> contains the following content:
-	
-		<root>
-    		<item>
-        		<attr>1</attr>
-    		</item>
-    		<item>
-        		<attr>2</attr>
-    		</item>
-		</root>
-	
-		import big.data.*;
-		DataSource ds = DataSource.connect("sample_file.xml").load();
-		String str = ds.fetchString("item/attr");
-		// normally, we can extract a single string data in the path item/attr, but we have multiple values in our case. Instead,
-		we should do the following:
-		String[] myList = ds.fetchStringArray("item/attr");
-		You will mostly use fetchStringArray() in this assignment. Sometimes, the information on the XML may not be complete. 
-		You might find that your fetch will return an empty string (i.e. ""). In that case, you can replace it with the string: "N/A"
-		 
-		 */
-	
 		//Declare the variables we need
 		AuctionTable newTable = new AuctionTable();
 		DataSource ds = DataSource.connect(URL).load();
@@ -84,50 +55,37 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 		int numAuctions;
 		
 		//Extract the necessary data
-		
 		try{
 		
-		sellerNames = ds.fetchStringArray("listing/seller_info/seller_name");
-		auctionIDs = ds.fetchStringArray("listing/auction_info/id_num");
-		timesRemaining = ds.fetchStringArray("listing/auction_info/time_left");
-		
-		buyerNames = ds.fetchStringArray("listing/auction_info/high_bidder/bidder_name");
-		highestBids = ds.fetchStringArray("listing/auction_info/current_bid");
-		
-		infoMemory = ds.fetchStringArray("listing/item_info/memory");
-		infoHD = ds.fetchStringArray("listing/item_info/hard_drive");
-		infoCPU = ds.fetchStringArray("listing/item_info/cpu");
-		
-		buyerNames = ds.fetchStringArray("listing/auction_info/high_bidder/bidder_name");
-		
-		numAuctions = auctionIDs.length;
-		itemInfos = new String[numAuctions];
-		
-		for(int i = 0; i < numAuctions; i++)
-		{
-			
-			//Organize the data
-			itemInfos[i] = infoMemory[i] + " - " + infoHD[i] + " - " + infoCPU[i];
-			
-			//Create auction objects
-			toAdd = new Auction(auctionIDs[i], sellerNames[i], itemInfos[i], parseTime(timesRemaining[i]));
-			
-			try{
-			
-				toAdd.newBid(buyerNames[i], parseCurrencyAmount(highestBids[i]));
-			
+			sellerNames = ds.fetchStringArray("listing/seller_info/seller_name");
+			auctionIDs = ds.fetchStringArray("listing/auction_info/id_num");
+			timesRemaining = ds.fetchStringArray("listing/auction_info/time_left");
+
+			buyerNames = ds.fetchStringArray("listing/auction_info/high_bidder/bidder_name");
+			highestBids = ds.fetchStringArray("listing/auction_info/current_bid");
+
+			infoMemory = ds.fetchStringArray("listing/item_info/memory");
+			infoHD = ds.fetchStringArray("listing/item_info/hard_drive");
+			infoCPU = ds.fetchStringArray("listing/item_info/cpu");
+
+			buyerNames = ds.fetchStringArray("listing/auction_info/high_bidder/bidder_name");
+
+			numAuctions = auctionIDs.length;
+			itemInfos = new String[numAuctions];
+
+			for(int i = 0; i < numAuctions; i++)
+			{
+
+				//Organize the data
+				itemInfos[i] = infoMemory[i] + " - " + infoHD[i] + " - " + infoCPU[i];
+
+				//Create auction objects
+				toAdd = new Auction(auctionIDs[i], sellerNames[i], itemInfos[i], parseTime(timesRemaining[i]), parseCurrencyAmount(highestBids[i]), buyerNames[i]);
+
 				//Add them to the AuctionTable
 				newTable.putAuction(auctionIDs[i], toAdd);
-				
+
 			}
-			catch(ClosedAuctionException e)
-			{
-				
-				System.out.println(" Error: " + e.getMessage() + "\n Auction " + auctionIDs[i] + "not added to table");
-				
-			}
-			
-		}
 		
 		}
 		catch(DataSourceException e)
@@ -137,12 +95,16 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 			
 		}
 		
-		//Return
 		return newTable;
 		
 	}
 	
-	public static int parseTime(String s)
+	/**
+	 * 
+	 * @param s
+	 * @return
+	 */
+	private static int parseTime(String s)
 	{
 		
 		int time = 0;
@@ -162,12 +124,15 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 		
 	}
 	
+	/**
+	 * 
+	 * @param s
+	 * @return
+	 */
 	private static double parseCurrencyAmount(String s)
 	{
 		
-		
-		
-		return 0;
+		return Double.parseDouble(s.substring(1).replaceAll(",", ""));
 		
 	}
 	
@@ -203,7 +168,7 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	public Auction getAuction(String auctionID)
 	{
 		
-		return this.get(auctionID);
+		return get(auctionID);
 		
 	}
 	
@@ -239,13 +204,34 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	{
 		
 		System.out.println(" Auction ID |      Bid   |        Seller         |          Buyer          |    Time   |  Item Info\n"
-						 + "===================================================================================================================================\n");
+						 + "===================================================================================================================================");
 		
 		Set<String> keySet = this.keySet();
 		
 		for(String s: keySet)
 			System.out.println(get(s));
 		
+		
+	}
+	
+	/**
+	 * Removes all closed auctions from this AuctionTable
+	 */
+	public void removeClosedAuctions()
+	{
+		
+		Set<String> keySet = this.keySet();
+		String[] keysToRemove = new String[keySet.size()];
+		int i = 0;
+		
+		for(String s : keySet)
+			if(this.getAuction(s).getTimeRemaining() == 0)
+				keysToRemove[i++] = s;
+		
+		
+		for(String s: keysToRemove)
+			if(s != null)
+				remove(s);
 		
 	}
 	
