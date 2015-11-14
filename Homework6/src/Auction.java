@@ -147,7 +147,9 @@ public class Auction implements Serializable {
 	public String toString()
 	{
 		
-		return "";
+		String format = "%11s | $%9.2f | %-22s| %-24s| %3d hours | %-1.42s";
+		
+		return String.format(format, auctionID, currentBid, sellerName, buyerName, timeRemaining, itemInfo);
 		
 	}
 	
