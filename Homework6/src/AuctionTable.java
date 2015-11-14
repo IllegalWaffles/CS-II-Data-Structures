@@ -19,6 +19,8 @@ import java.util.Set;
  */
 public class AuctionTable extends Hashtable<String, Auction> implements Serializable {
 	
+	private final String TAB = "   ";
+	
 	/**
 	 * Default constructor for AuctionTable
 	 */
@@ -58,17 +60,23 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 		try{
 		
 			sellerNames = ds.fetchStringArray("listing/seller_info/seller_name");
+			replaceEmptyStrings(sellerNames);
 			auctionIDs = ds.fetchStringArray("listing/auction_info/id_num");
+			replaceEmptyStrings(auctionIDs);
 			timesRemaining = ds.fetchStringArray("listing/auction_info/time_left");
-
+			replaceEmptyStrings(timesRemaining);
+			
 			buyerNames = ds.fetchStringArray("listing/auction_info/high_bidder/bidder_name");
+			replaceEmptyStrings(buyerNames);
 			highestBids = ds.fetchStringArray("listing/auction_info/current_bid");
-
+			replaceEmptyStrings(highestBids);
+			
 			infoMemory = ds.fetchStringArray("listing/item_info/memory");
+			replaceEmptyStrings(infoMemory);
 			infoHD = ds.fetchStringArray("listing/item_info/hard_drive");
+			replaceEmptyStrings(infoHD);
 			infoCPU = ds.fetchStringArray("listing/item_info/cpu");
-
-			buyerNames = ds.fetchStringArray("listing/auction_info/high_bidder/bidder_name");
+			replaceEmptyStrings(infoCPU);
 
 			numAuctions = auctionIDs.length;
 			itemInfos = new String[numAuctions];
@@ -133,6 +141,19 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	{
 		
 		return Double.parseDouble(s.substring(1).replaceAll(",", ""));
+		
+	}
+	
+	/**
+	 * 
+	 * @param array
+	 */
+	private static void replaceEmptyStrings(String[] array)
+	{
+		
+		for(int i = 0; i < array.length; i++)
+			if(array[i].equals(""))
+				array[i] = "N/A";
 		
 	}
 	
@@ -211,7 +232,6 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 		for(String s: keySet)
 			System.out.println(get(s));
 		
-		
 	}
 	
 	/**
@@ -228,10 +248,31 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 			if(this.getAuction(s).getTimeRemaining() == 0)
 				keysToRemove[i++] = s;
 		
-		
 		for(String s: keysToRemove)
 			if(s != null)
 				remove(s);
+		
+	}
+	
+	/**
+	 * 
+	 * @param auctionID
+	 * @throws IllegalArgumentException
+	 */
+	public void printAuctionInfo(String auctionID) throws IllegalArgumentException
+	{
+		
+		Auction auctionToPrint = get(auctionID);
+		
+		if(auctionToPrint == null)
+			throw new IllegalArgumentException("Auction " + auctionID + " not found");
+		
+		
+		System.out.println("Auction: " + auctionID
+				+ "\n" + TAB + "Seller: " + auctionToPrint.getSellerName()
+				+ "\n" + TAB + "Buyer: " + auctionToPrint.getBuyerName()
+				+ "\n" + TAB + "Time: " + auctionToPrint.getTimeRemaining() + " hours"
+				+ "\n" + TAB + "Info: " + auctionToPrint.getItemInfo());
 		
 	}
 	

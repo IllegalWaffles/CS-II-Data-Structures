@@ -58,7 +58,7 @@ public class AuctionSystem implements Serializable {
 			input = sc.nextLine().toUpperCase();
 			parsedInput = input.split(" ");
 			
-			if(parsedInput[0].equals("Q"))
+			if(parsedInput[0].equals("Q") || parsedInput[0].equals("EXIT"))
 			{
 				
 				System.out.println("Exiting..");
@@ -93,14 +93,75 @@ public class AuctionSystem implements Serializable {
 			else if(parsedInput[0].equals("B"))
 			{
 				
+				System.out.print("Enter an auction ID to bid on: ");
 				
+				try{
+					
+					String auctionID = sc.nextLine();
+					Auction toBidOn = myTable.getAuction(auctionID);
+					
+					if(toBidOn == null)
+						throw new IllegalArgumentException("Auction " + auctionID + " not found.");
+						
+					if(toBidOn.getTimeRemaining() > 0)
+					{
+						
+						System.out.println("Auction " + toBidOn.getAuctionID() + "is OPEN"
+								 + "\nCurrent Bid: $ " + toBidOn.getCurrentBid()
+								 + "\n"
+								 + "What would you like to bid?: ");
+						
+						double  bidAmt = Double.parseDouble(sc.nextLine());
+						
+						toBidOn.newBid(username, bidAmt);
+						
+						System.out.println("Bid accepted.");
+						
+					}
+					else
+					{
+						
+						System.out.println("Auction " + toBidOn.getAuctionID() + " is CLOSED"
+								+ "\nCurrent Bid: $ " + toBidOn.getCurrentBid()
+								+ "\n"
+								+ "You can no longer bid on this item.");
+						
+					}
+					
+				}
+				catch(NumberFormatException e)
+				{
+					
+					System.out.println("Input not valid. Try again");
+					
+				}
+				catch(IllegalArgumentException e)
+				{
+						
+					System.out.println(e.getMessage());
+					
+				}
+				catch(ClosedAuctionException e){}
 				
 			}
 			else if(parsedInput[0].equals("I"))
 			{
 				
+				System.out.print("Enter an auction ID: ");
 				
+				try{
+					
+					myTable.printAuctionInfo(sc.nextLine());
 				
+				}
+				catch(IllegalArgumentException e)
+				{
+						
+					System.out.println(e.getMessage());
+				
+				}
+			
+			
 			}
 			else if(parsedInput[0].equals("P"))
 			{
@@ -128,7 +189,7 @@ public class AuctionSystem implements Serializable {
 			else
 			{
 				
-				System.out.println("Input not recognized. Try again");
+				System.out.println("Command not recognized. Try again");
 				
 			}
 			
