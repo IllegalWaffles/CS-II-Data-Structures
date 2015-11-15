@@ -1,4 +1,4 @@
-import java.io.Serializable;
+import java.io.*;
 import java.util.Scanner;
 
 /**
@@ -16,10 +16,7 @@ import java.util.Scanner;
  * @author Kuba Gasiorowski
  *
  */
-public class AuctionSystem implements Serializable {
-
-	private static AuctionTable myTable;
-	private static String username;
+public class AuctionSystem{
 	
 	/**
 	 * Main driving method behind this entire program.
@@ -32,14 +29,55 @@ public class AuctionSystem implements Serializable {
 	public static void main(String[] args)
 	{
 		
-		
-		myTable = new AuctionTable();
 		boolean finished = false;
 		Scanner sc = new Scanner(System.in);
 		String input, parsedInput[];
+		AuctionTable myTable = null;
+		String username;
+		
+		//Code to read the auctiontable
+		try{
+			
+			ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream("auction.obj"));
+			
+			System.out.print("Existing auction table detected. Load? (y/n)");
+			
+			String answer = sc.nextLine().toUpperCase();
+			
+			if(answer.equals("Y") || answer.equals("YES"))
+			{
+				
+				myTable = (AuctionTable)fileIn.readObject();
+				System.out.println("Auction table loaded from file.");
+				
+			}
+			else
+			{
+				
+				myTable = new AuctionTable();
+				System.out.println("Auction table not loaded. Empty table created.");
+				
+			}
+			
+			fileIn.close();
+			
+		}
+		catch(FileNotFoundException e)
+		{
+			
+			System.out.println("File not detected. Creating new AuctionTable for this program");
+			myTable = new AuctionTable();
+			
+		}
+		catch(Exception e)
+		{
+			
+			System.out.println("Something went wrong. I don't know what, but something did.");
+			
+		}
+		
 		
 		System.out.print("LOGIN - Enter your username: ");
-		
 		username = sc.nextLine();	
 		
 		System.out.println("\n(D) - Import Data from URL\n"
@@ -87,6 +125,33 @@ public class AuctionSystem implements Serializable {
 			else if(parsedInput[0].equals("A"))
 			{
 				
+				String newID = "", itemInfo;
+				int timeRemaining;
+				
+				System.out.println("Creating a new Auction as " + username);
+				
+				try{
+				
+					System.out.print("Please enter an Auction ID: ");
+					newID = sc.nextLine();
+					
+					System.out.print("Please enter an Auction time (hours): ");
+					timeRemaining = Integer.parseInt(sc.nextLine());
+					
+					System.out.print("Please enter some Item Info: ");
+					itemInfo = sc.nextLine();
+					
+					myTable.putAuction(newID, new Auction(newID, username, itemInfo, timeRemaining));
+					
+				}
+				catch(NumberFormatException e)
+				{
+					
+					System.out.println("Invalid input. Try again");
+					
+				}
+				
+				System.out.println("Auction " + newID + " added to table.");
 				
 				
 			}
@@ -106,10 +171,10 @@ public class AuctionSystem implements Serializable {
 					if(toBidOn.getTimeRemaining() > 0)
 					{
 						
-						System.out.println("Auction " + toBidOn.getAuctionID() + "is OPEN"
+						System.out.print("Auction " + toBidOn.getAuctionID() + " is OPEN."
 								 + "\nCurrent Bid: $ " + toBidOn.getCurrentBid()
 								 + "\n"
-								 + "What would you like to bid?: ");
+								 + "What would you like to bid?: $");
 						
 						double  bidAmt = Double.parseDouble(sc.nextLine());
 						
@@ -121,7 +186,7 @@ public class AuctionSystem implements Serializable {
 					else
 					{
 						
-						System.out.println("Auction " + toBidOn.getAuctionID() + " is CLOSED"
+						System.out.println("Auction " + toBidOn.getAuctionID() + " is CLOSED."
 								+ "\nCurrent Bid: $ " + toBidOn.getCurrentBid()
 								+ "\n"
 								+ "You can no longer bid on this item.");
@@ -181,7 +246,19 @@ public class AuctionSystem implements Serializable {
 			{
 				
 				System.out.print("How many hours to pass?\nHours:");
-				int hours = Integer.parseInt(sc.nextLine());
+				int hours = 0;
+				
+				try{
+				
+					hours = Integer.parseInt(sc.nextLine());
+				
+				}
+				catch(NumberFormatException e)
+				{
+					
+					System.out.println("Invalid input. Try again");
+					
+				}
 				
 				myTable.letTimePass(hours);
 				
@@ -195,9 +272,38 @@ public class AuctionSystem implements Serializable {
 			
 		}
 		
+		//Code to save the auctiontable
+		System.out.print("Save the current auction table to file? (y/n): ");
+		String answer = sc.nextLine().toUpperCase();
+		
+		if(answer.equals("Y") || answer.equals("YES"))
+		{
+			
+			try{
+			
+				ObjectOutputStream fileOut = new ObjectOutputStream(new FileOutputStream("auction.obj"));
+				fileOut.writeObject(myTable);
+				fileOut.close();
+				System.out.println("Table saved. Goodbye!");
+				
+			}
+			catch(Exception e)
+			{
+			
+				System.out.println(e.getMessage() + " : something went wrong");
+				
+			}
+				
+		}
+		else
+		{
+			
+			System.out.print("Table not saved. Goodbye!");
+			
+		}
+		
 		sc.close();
 		
 	}
-	
 	
 }
