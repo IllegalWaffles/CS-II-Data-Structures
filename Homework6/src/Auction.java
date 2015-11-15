@@ -16,7 +16,7 @@ import java.io.Serializable;
  * @author Kuba Gasiorowski
  *
  */
-public class Auction implements Serializable {
+public class Auction implements Serializable{
 
 	private int timeRemaining;
 	private double currentBid;
@@ -47,6 +47,21 @@ public class Auction implements Serializable {
 		
 	}
 	
+	/**
+	 * 
+	 * @param auctionID
+	 * 		the id of this auction
+	 * @param sellerName
+	 * 		the name of the seller
+	 * @param itemInfo
+	 * 		the information of the item on sale
+	 * @param timeRemaining
+	 * 		the time remaining for this auction
+	 * @param currentBid
+	 * 		the current top bid on this auction
+	 * @param buyerName
+	 * 		the current top bidder on this auction
+	 */
 	public Auction(String auctionID, String sellerName, String itemInfo, int timeRemaining, double currentBid, String buyerName)
 	{
 		

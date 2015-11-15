@@ -108,9 +108,13 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	}
 	
 	/**
+	 * Helper method to parse the time given by the xml sheets
+	 * into a standard integer
 	 * 
 	 * @param s
+	 * 		the string to parse
 	 * @return
+	 * 		the time of string s
 	 */
 	private static int parseTime(String s)
 	{
@@ -133,9 +137,13 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	}
 	
 	/**
+	 * Helper method to parse the currency amounts given
+	 * by xml sheets.
 	 * 
 	 * @param s
+	 * 		the string to parse
 	 * @return
+	 * 		the double value of this currency
 	 */
 	private static double parseCurrencyAmount(String s)
 	{
@@ -145,8 +153,11 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	}
 	
 	/**
+	 * Loops through an String array and replaces all nulls
+	 * with an "N/A"
 	 * 
 	 * @param array
+	 * 		the array to loop through
 	 */
 	private static void replaceEmptyStrings(String[] array)
 	{
@@ -235,7 +246,7 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	}
 	
 	/**
-	 * Removes all closed auctions from this AuctionTable
+	 * Removes all closed auctions from this AuctionTable.
 	 */
 	public void removeClosedAuctions()
 	{
@@ -255,9 +266,13 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	}
 	
 	/**
+	 * Prints the info of the auction with the
+	 * specified auctionID.
 	 * 
 	 * @param auctionID
+	 * 		the id of the auction to find
 	 * @throws IllegalArgumentException
+	 * 		this table does not contain the given key
 	 */
 	public void printAuctionInfo(String auctionID) throws IllegalArgumentException
 	{
