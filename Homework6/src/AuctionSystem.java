@@ -1,4 +1,9 @@
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.File;
 import java.util.Scanner;
 
 /**
@@ -36,48 +41,77 @@ public class AuctionSystem{
 		String username;
 		
 		//Code to read the auctiontable
-		try{
+		
+		File data = new File("data");
+		
+		//Dir to hold auctions is called "data"
+		//If it does not exist, create it
+		if(data.exists() && data.isDirectory())
+			System.out.println("Data directory detected, continuing...");
+		else if(!data.mkdir())
+			System.out.println("These was a problem with creating the data directory");
+		else{
+			System.out.println("Data directory missing! Generating new Data Directory...\nData directory successfully generated...");
+		}
+		//If it is empty, automatically create a new auctiontable
+		if(data.list().length == 0)
+		{
 			
-			ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream("auction.obj"));
+			myTable = new AuctionTable();
+			System.out.println("No saved data detected: generating new auction table...");
 			
-			System.out.print("Existing auction table detected. Load? (y/n)");
+		}
+		else //If it is not, ask user if they want to load a new table
+		{
 			
+			System.out.print("Saved auctions detected. Load from file? (y/n): ");
 			String answer = sc.nextLine().toUpperCase();
 			
 			if(answer.equals("Y") || answer.equals("YES"))
 			{
+			
+				for(String file: data.list())
+					System.out.print("\"" + file + "\"" + " ");
+					
+				System.out.print("\nAuction to load (do not include .obj):");
+				String auctionToRead = "data/" + sc.nextLine() + ".obj";
+			
+				try{
+			
+					ObjectInputStream fileIn = new ObjectInputStream(new FileInputStream(auctionToRead));
+					myTable = (AuctionTable)fileIn.readObject();
+					fileIn.close();
 				
-				myTable = (AuctionTable)fileIn.readObject();
-				System.out.println("Auction table loaded from file.");
+				}
+				catch(FileNotFoundException e)
+				{
 				
+					System.out.println(auctionToRead + " was not found.\nAborting program, try again!");
+					sc.close();
+					return;
+					
+				}
+				catch(Exception e)
+				{
+				
+					System.out.println(e.getMessage() + ": Something went wrong");
+				
+				}
+			
+			
 			}
 			else
 			{
 				
+				System.out.println("New auction table generated.");
 				myTable = new AuctionTable();
-				System.out.println("Auction table not loaded. Empty table created.");
 				
 			}
 			
-			fileIn.close();
-			
 		}
-		catch(FileNotFoundException e)
-		{
-			
-			System.out.println("File not detected. Creating new AuctionTable for this program");
-			myTable = new AuctionTable();
-			
-		}
-		catch(Exception e)
-		{
-			
-			System.out.println("Something went wrong. I don't know what, but something did.");
-			
-		}
+		//Proceed as normal
 		
-		
-		System.out.print("LOGIN - Enter your username: ");
+		System.out.print("\nLOGIN - Enter your username: ");
 		username = sc.nextLine();	
 		
 		System.out.println("\n(D) - Import Data from URL (WARNING: This will overwrite the current auction table\n"
@@ -282,15 +316,26 @@ public class AuctionSystem{
 		}
 		
 		//Code to save the auctiontable
+		
+		//save the auction as this name under "data"
+		
+		//Otherwise terminate the program
+		
+		
+		//Prompts to save the auction table (y/n)
 		System.out.print("Save the current auction table to file? (y/n): ");
 		String answer = sc.nextLine().toUpperCase();
 		
 		if(answer.equals("Y") || answer.equals("YES"))
 		{
 			
+			//If yes, prompt for a name
+			System.out.print("Name to save as (do not include .obj): ");
+			String fileName = "data/" + sc.nextLine() + ".obj";
+			
 			try{
 			
-				ObjectOutputStream fileOut = new ObjectOutputStream(new FileOutputStream("auction.obj"));
+				ObjectOutputStream fileOut = new ObjectOutputStream(new FileOutputStream(fileName));
 				fileOut.writeObject(myTable);
 				fileOut.close();
 				System.out.println("Table saved. Goodbye!");
