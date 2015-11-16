@@ -80,7 +80,7 @@ public class AuctionSystem{
 		System.out.print("LOGIN - Enter your username: ");
 		username = sc.nextLine();	
 		
-		System.out.println("\n(D) - Import Data from URL\n"
+		System.out.println("\n(D) - Import Data from URL (WARNING: This will overwrite the current auction table\n"
 						   + "(A) - Create a New Auction\n"
 						   + "(B) - Bid on an Item\n"
 						   + "(I) - Get Info on Auction\n"
@@ -125,6 +125,7 @@ public class AuctionSystem{
 			else if(parsedInput[0].equals("A"))
 			{
 				
+				//Code to add a function
 				String newID = "", itemInfo;
 				int timeRemaining;
 				
@@ -158,6 +159,7 @@ public class AuctionSystem{
 			else if(parsedInput[0].equals("B"))
 			{
 				
+				//Code to bid on an auction
 				System.out.print("Enter an auction ID to bid on: ");
 				
 				try{
@@ -168,6 +170,7 @@ public class AuctionSystem{
 					if(toBidOn == null)
 						throw new IllegalArgumentException("Auction " + auctionID + " not found.");
 						
+					//Checks if the auction is closed
 					if(toBidOn.getTimeRemaining() > 0)
 					{
 						
@@ -206,12 +209,14 @@ public class AuctionSystem{
 					System.out.println(e.getMessage());
 					
 				}
+				//Technically this exception will never be thrown since it's already checked for
 				catch(ClosedAuctionException e){}
 				
 			}
 			else if(parsedInput[0].equals("I"))
 			{
 				
+				//Code to get information on a specific auction
 				System.out.print("Enter an auction ID: ");
 				
 				try{
@@ -231,12 +236,14 @@ public class AuctionSystem{
 			else if(parsedInput[0].equals("P"))
 			{
 				
+				//Prints a neatly formatted table of auctions
 				myTable.printTable();
 				
 			}
 			else if(parsedInput[0].equals("R"))
 			{
 				
+				//Removes all closed auctions from this table
 				System.out.println("Removing closed auctions...");
 				myTable.removeClosedAuctions();
 				System.out.println("Done.");
@@ -245,6 +252,7 @@ public class AuctionSystem{
 			else if(parsedInput[0].equals("T"))
 			{
 				
+				//Passes a certain number of hours over each auction
 				System.out.print("How many hours to pass?\nHours:");
 				int hours = 0;
 				
@@ -266,6 +274,7 @@ public class AuctionSystem{
 			else
 			{
 				
+				//Otherwise, the input was wrong
 				System.out.println("Command not recognized. Try again");
 				
 			}

@@ -48,9 +48,12 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	
 		//Declare the variables we need
 		AuctionTable newTable = new AuctionTable();
+		
 		DataSource ds = DataSource.connect(URL).load();
-		String sellerNames[], auctionIDs[], itemInfos[], buyerNames[], timesRemaining[], highestBids[];
-		String infoMemory[], infoHD[], infoCPU[];
+		
+		String sellerNames[], auctionIDs[], itemInfos[], 
+			   buyerNames[], timesRemaining[], highestBids[],
+		       infoMemory[], infoHD[], infoCPU[];
 		
 		Auction toAdd;
 		
@@ -103,6 +106,7 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 			
 		}
 		
+		//Return the new auction table
 		return newTable;
 		
 	}
@@ -123,6 +127,10 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 		
 		s = s.replaceAll(",", "");
 		s = s.trim();
+		
+		// The string should now have the form <# hours # days>
+		// or some variation or the top, with the value corresponding
+		// with hour or day directly preceding it
 		
 		String parsedTime[] = s.split(" ");
 		
@@ -241,7 +249,7 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 		Set<String> keySet = this.keySet();
 		
 		for(String s: keySet)
-			System.out.println(get(s));
+			System.out.println(getAuction(s));
 		
 	}
 	
@@ -255,6 +263,9 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 		String[] keysToRemove = new String[keySet.size()];
 		int i = 0;
 		
+		//To avoid exceptions, the keys are saved
+		//to an array, because you cannot mutate a
+		//hashmap or table while iterating over it
 		for(String s : keySet)
 			if(this.getAuction(s).getTimeRemaining() == 0)
 				keysToRemove[i++] = s;
@@ -277,14 +288,13 @@ public class AuctionTable extends Hashtable<String, Auction> implements Serializ
 	public void printAuctionInfo(String auctionID) throws IllegalArgumentException
 	{
 		
-		Auction auctionToPrint = get(auctionID);
+		Auction auctionToPrint = getAuction(auctionID);
 		
 		if(auctionToPrint == null)
 			throw new IllegalArgumentException("Auction " + auctionID + " not found");
 		
-		
 		System.out.println("Auction: " + auctionID
-				+ "\n" + TAB + "Seller: " + auctionToPrint.getSellerName()
+			   	+ "\n" + TAB + "Seller: " + auctionToPrint.getSellerName()
 				+ "\n" + TAB + "Buyer: " + auctionToPrint.getBuyerName()
 				+ "\n" + TAB + "Time: " + auctionToPrint.getTimeRemaining() + " hours"
 				+ "\n" + TAB + "Info: " + auctionToPrint.getItemInfo());
