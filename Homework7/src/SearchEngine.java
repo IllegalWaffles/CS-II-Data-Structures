@@ -5,6 +5,8 @@
  */
 public class SearchEngine {
 
+	private WebGraph web;
+	
 	public static void main(String[] args)
 	{
 		
