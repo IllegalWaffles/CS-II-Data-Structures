@@ -1,4 +1,4 @@
-import java.util.Collection;
+import java.util.ArrayList;
 
 /**
  * 
@@ -9,9 +9,9 @@ public class WebPage {
 
 	private String url;
 	private int rank, index;
-	private Collection<String> keywords;
+	private ArrayList<String> keywords;
 	
-	public WebPage(String url, Collection<String> keywords, int index)
+	public WebPage(String url, ArrayList<String> keywords, int index)
 	{
 		
 		this(url, keywords);
@@ -19,19 +19,12 @@ public class WebPage {
 		
 	}
 	
-	public WebPage(String url, Collection<String> keywords)
+	public WebPage(String url, ArrayList<String> keywords)
 	{
 		
 		this.url = url;
 		this.keywords = keywords;
 		index = 0;
-		
-	}
-	
-	public String toString()
-	{
-		
-		return url;
 		
 	}
 	
@@ -49,7 +42,7 @@ public class WebPage {
 		
 	}
 	
-	public Collection<String> getKeywords()
+	public ArrayList<String> getKeywords()
 	{
 		
 		return keywords;
@@ -62,4 +55,12 @@ public class WebPage {
 		return url;
 		
 	}
+	
+	public String toString()
+	{
+		
+		return " | " + url + " |###| " + keywords;
+		
+	}
+	
 }
