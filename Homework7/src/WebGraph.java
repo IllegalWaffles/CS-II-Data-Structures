@@ -42,6 +42,7 @@ public class WebGraph {
 		
 		pages.add(new WebPage(url, keywords));		
 		
+		updatePageRanks();
 		
 	}
 	
@@ -82,12 +83,57 @@ public class WebGraph {
 			
 		}
 		
+		updatePageRanks();
+		
 	}
 	
 	public void removePage(String url)
 	{
+	
+		//Code to remove pages from the collection
+		//Also to remove all links as well
 		
+		ArrayList<WebPage> pageList = (ArrayList<WebPage>)pages;
 		
+		//If the url is null, do nothing
+		if(url == null)
+			return;
+		
+		int indexToRemove = -1;
+		
+		for(int i = 0; i < pages.size(); i++)
+			if(pageList.get(i).getURL().equals(url))
+			{
+				
+				indexToRemove = i;
+				break;
+			
+			}
+		
+		//If the url was not found, do nothing
+		if(indexToRemove == -1)
+			return;
+		
+		//Remove the page from pages
+		pageList.remove(indexToRemove);
+		
+		//Remove the row and columns from the list array
+		removeRowAndColumn(indexToRemove);
+		
+		updatePageRanks();
+		
+	}
+	
+	private void removeRowAndColumn(int index)
+	{
+		
+		for(int j = index; j < MAX_PAGES - 1; j++)
+			for(int i = 0; i < MAX_PAGES - 1; i++)
+				links[i][j] = links[i][j+1];
+		
+		for(int i = index; i < MAX_PAGES - 1; i++)
+			for(int j = 0; j < MAX_PAGES - 1; j++)
+				links[i][j] = links[i+1][j];
 		
 	}
 	
@@ -128,6 +174,16 @@ public class WebGraph {
 			
 		}
 		
+		updatePageRanks();
+		
+	}
+	
+	private void updatePageRanks()
+	{
+		
+		//This code updates the page ranks for each page
+		//Call after removing or adding a page or link
+		
 	}
 	
 	public void printTable()
@@ -135,6 +191,20 @@ public class WebGraph {
 		
 		
 		
+	}
+	
+	public void printLinkTable()
+	{
+		
+		for(int i = 0; i < pages.size(); i++)
+		{
+			
+			for(int j = 0; j < pages.size(); j++)
+				System.out.print(links[i][j] + " ");
+	
+			System.out.println();
+			
+		}
 		
 	}
 	
