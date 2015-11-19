@@ -9,10 +9,24 @@ public class WebPage {
 
 	private String url;
 	private int rank, index;
-	
 	private Collection<String> keywords;
 	
-	public WebPage(){}
+	public WebPage(String url, Collection<String> keywords, int index)
+	{
+		
+		this(url, keywords);
+		this.index = index;
+		
+	}
+	
+	public WebPage(String url, Collection<String> keywords)
+	{
+		
+		this.url = url;
+		this.keywords = keywords;
+		index = 0;
+		
+	}
 	
 	public String toString()
 	{
@@ -21,4 +35,31 @@ public class WebPage {
 		
 	}
 	
+	public int getIndex()
+	{
+		
+		return index;
+		
+	}
+	
+	public int getRank()
+	{
+		
+		return rank;
+		
+	}
+	
+	public Collection<String> getKeywords()
+	{
+		
+		return keywords;
+		
+	}
+	
+	public String getURL()
+	{
+		
+		return url;
+		
+	}
 }
