@@ -10,15 +10,26 @@ public class SearchEngine {
 	private static WebGraph web;
 	private static final String TAB = "   ";
 	
+	public static final String PAGES_FILE = "pages.txt";
+	public static final String LINKS_FILE = "links.txt";
+	
 	public static void main(String[] args)
 	{
 		
-		web = new WebGraph();
+		web = WebGraph.buildFromFiles(PAGES_FILE, LINKS_FILE);
+		
+		web.printLinkArray();
+		
+		System.out.println();
+		
+		web.printTable();
+		
 		boolean finished = false;
 		Scanner sc = new Scanner(System.in);
 		String command;
 		
-		System.out.println(TAB + "(AP) - Add a new page to the graph.\n"
+		System.out.println("Menu:\n" 
+						 + TAB + "(AP) - Add a new page to the graph.\n"
 					 	 + TAB + "(RP) - Remove a page from the graph.\n"
 					 	 + TAB + "(AL) - Add a link between pages in the graph.\n"
 						 + TAB + "(RM) - Remove a link between pages in the graph.\n"
@@ -29,7 +40,7 @@ public class SearchEngine {
 		while(!finished)
 		{
 			
-			System.out.print(">");
+			System.out.print("> ");
 			command = sc.nextLine().toUpperCase().split(" ")[0];
 			
 			if(command.equals("Q"))
@@ -54,11 +65,33 @@ public class SearchEngine {
 			else if(command.equals("AL"))
 			{
 				
-				System.out.println("You chose AL");
+				String src, dest;
+				
+				try{
+				
+					System.out.print("Enter a source URL: ");
+					src = sc.nextLine();
+					System.out.print("Enter a destination URL: ");
+					dest = sc.nextLine();
+				
+					web.addLink(src, dest);
+				
+					System.out.println("Link added.");
+					
+				}
+				catch(Exception e)
+				{
+					
+					System.out.println(e.getMessage());
+					
+				}
 				
 			}
-			else if(command.equals("RM"))
+			else if(command.equals("RL"))
 			{
+				
+				
+				
 				
 				System.out.println("You chose RM");
 				
@@ -75,7 +108,7 @@ public class SearchEngine {
 				String printCommand; 
 				boolean printFinished = false;
 				
-				while(!finished)
+				while(!printFinished)
 				{
 					
 					printCommand = sc.nextLine().toUpperCase().split(" ")[0];
@@ -83,7 +116,7 @@ public class SearchEngine {
 					if(printCommand.equals("Q"))
 					{
 						
-						finished = true;
+						printFinished = true;
 						
 					}
 					else if(printCommand.equals("I"))
