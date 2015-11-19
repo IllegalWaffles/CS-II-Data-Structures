@@ -1,5 +1,7 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Scanner;
 
 /**
  * 
@@ -8,7 +10,7 @@ import java.util.Collection;
  */
 public class WebGraph {
 
-	private Collection<WebPage> pages;
+	private ArrayList<WebPage> pages;
 	private int links[][];
 	
 	public static final int MAX_PAGES = 40;
@@ -24,13 +26,90 @@ public class WebGraph {
 	public static WebGraph buildFromFiles(String pagesFile, String linksFile) throws IllegalArgumentException
 	{
 		
+		Scanner sc;
+		WebGraph web = new WebGraph();
 		
+		System.out.println("Loading WebGraph data...");
 		
-		return null;
+		//Code to read and parse the pages in the system
+		try{
+		
+			sc = new Scanner(new File(pagesFile));
+		
+		}
+		catch(FileNotFoundException e)
+		{
+			
+			System.out.println("File " + pagesFile + " was not found. Cannot build data.");
+			return null;
+			
+		}
+		
+		String[] parsedInput;
+		String url;
+		ArrayList<String> keywords;
+		
+		while(sc.hasNextLine())
+		{
+		
+			keywords = new ArrayList<String>();
+			
+			parsedInput = sc.nextLine().trim().split(" ");
+			url = parsedInput[0];
+			
+			for(int i = 1; i < parsedInput.length; i++)
+				keywords.add(parsedInput[i]);
+			
+			web.getPages().add(new WebPage(url, keywords));
+			
+			
+		}
+		
+		sc.close();
+		
+		//Code to read and parse the links between pages
+		try{
+			
+			sc = new Scanner(new File(linksFile));
+			
+		}
+		catch(FileNotFoundException e)
+		{
+			
+			System.out.println("File " + pagesFile + " was not found. Cannot build data.");
+			return null;
+			
+		}
+		
+		String src, dest;
+		
+		while(sc.hasNextLine())
+		{
+			
+			parsedInput = sc.nextLine().trim().split(" ");
+			src = parsedInput[0];
+			dest = parsedInput[1];
+			
+			web.addLink(src, dest);
+			
+		}
+		
+		sc.close();
+		
+		System.out.println("Success!\n");
+		
+		return web;
 		
 	}
 	
-	public void addPage(String url, Collection<String> keywords) throws IllegalArgumentException
+	public ArrayList<WebPage> getPages()
+	{
+		
+		return pages;
+		
+	}
+	
+	public void addPage(String url, ArrayList<String> keywords) throws IllegalArgumentException
 	{
 	
 		if(url == null || keywords == null)
@@ -53,7 +132,7 @@ public class WebGraph {
 		
 		//Find the index of the source page
 		for(int i = 0; i < pages.size(); i++)
-			if(((ArrayList<WebPage>)pages).get(i).getURL().equals(source))
+			if(pages.get(i).getURL().equals(source))
 			{
 			
 				sourceIndex = i;
@@ -63,7 +142,7 @@ public class WebGraph {
 	
 		//Find the index of the destination page
 		for(int i = 0; i < pages.size(); i++)
-			if(((ArrayList<WebPage>)pages).get(i).getURL().equals(destination))
+			if(pages.get(i).getURL().equals(destination))
 			{
 				
 				destinationIndex = i;
@@ -71,17 +150,12 @@ public class WebGraph {
 				
 			}
 		
-		try{
-			
-			links[sourceIndex][destinationIndex] = 1;
+		if(sourceIndex == -1)
+			throw new IllegalArgumentException("Error: " + source + " not found in this WebGraph");
+		else if(sourceIndex == -1)
+			throw new IllegalArgumentException("Error: " + destination + " not found in this WebGraph");
 		
-		}
-		catch(ArrayIndexOutOfBoundsException e)
-		{
-		
-			System.out.println("Link not added, an exception was thrown");
-			
-		}
+		links[sourceIndex][destinationIndex] = 1;
 		
 		updatePageRanks();
 		
@@ -93,8 +167,6 @@ public class WebGraph {
 		//Code to remove pages from the collection
 		//Also to remove all links as well
 		
-		ArrayList<WebPage> pageList = (ArrayList<WebPage>)pages;
-		
 		//If the url is null, do nothing
 		if(url == null)
 			return;
@@ -102,7 +174,7 @@ public class WebGraph {
 		int indexToRemove = -1;
 		
 		for(int i = 0; i < pages.size(); i++)
-			if(pageList.get(i).getURL().equals(url))
+			if(pages.get(i).getURL().equals(url))
 			{
 				
 				indexToRemove = i;
@@ -115,7 +187,7 @@ public class WebGraph {
 			return;
 		
 		//Remove the page from pages
-		pageList.remove(indexToRemove);
+		pages.remove(indexToRemove);
 		
 		//Remove the row and columns from the list array
 		removeRowAndColumn(indexToRemove);
@@ -144,7 +216,7 @@ public class WebGraph {
 		
 		//Find the index of the source page
 		for(int i = 0; i < pages.size(); i++)
-			if(((ArrayList<WebPage>)pages).get(i).getURL().equals(source))
+			if(pages.get(i).getURL().equals(source))
 			{
 			
 				sourceIndex = i;
@@ -154,7 +226,7 @@ public class WebGraph {
 	
 		//Find the index of the destination page
 		for(int i = 0; i < pages.size(); i++)
-			if(((ArrayList<WebPage>)pages).get(i).getURL().equals(destination))
+			if(pages.get(i).getURL().equals(destination))
 			{
 				
 				destinationIndex = i;
@@ -162,17 +234,13 @@ public class WebGraph {
 				
 			}
 		
-		try{
-			
-			links[sourceIndex][destinationIndex] = 0;
+		if(sourceIndex == -1)
+			throw new IllegalArgumentException("Error: " + source + " not found in this WebGraph");
 		
-		}
-		catch(ArrayIndexOutOfBoundsException e)
-		{
+		else if(sourceIndex == -1)
+			throw new IllegalArgumentException("Error: " + destination + " not found in this WebGraph");
 		
-			System.out.println("Link not removed, an exception was thrown");
-			
-		}
+		links[sourceIndex][destinationIndex] = 0;
 		
 		updatePageRanks();
 		
@@ -189,11 +257,42 @@ public class WebGraph {
 	public void printTable()
 	{
 		
+		String toPrint = "";
+		int i = 0;
 		
+		for(WebPage p : pages)
+		{
+		
+			toPrint = i++ + "" + p;			
+			//toPrint = toPrint.replace("###", getLinks(i));
+			System.out.println(toPrint);
+		
+		}
 		
 	}
 	
-	public void printLinkTable()
+	private String getLinks(int src)
+	{
+		
+		String toReturn = "";
+		
+		/*
+		
+		for(int i = 0; i < pages.size(); i++)
+		{
+			
+			if(links[i][src] == 1)
+				toReturn = i + ", ";
+				
+		}
+		
+		*/
+		
+		return toReturn;
+		
+	}
+	
+	public void printLinkArray()
 	{
 		
 		for(int i = 0; i < pages.size(); i++)
