@@ -1,6 +1,18 @@
 import java.util.Scanner;
 
 /**
+ * Kuba Gasiorowski, kgasiorowski, 109776237, kuba.gasiorowski@sbu.edu
+ * 
+ * Homework #7
+ * Recitation 03
+ * Rec TA: Ka Wing Fong
+ * Grading Ta: Zhichuang Sun
+ * 
+ * Represents a search engine, of
+ * sorts. This is the main driving 
+ * class behind the program. Contains 
+ * a simple command-driven UI to allow
+ * the user to manipulate a WebGraph.
  * 
  * @author Kuba Gasiorowski
  *
@@ -13,6 +25,11 @@ public class SearchEngine {
 	public static final String PAGES_FILE = "pages.txt";
 	public static final String LINKS_FILE = "links.txt";
 	
+	/**
+	 * Main driving method behind this program.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args)
 	{
 		

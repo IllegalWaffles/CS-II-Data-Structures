@@ -1,8 +1,21 @@
 import java.util.Comparator;
 
-public class RankComparator implements Comparator{
+/**
+ * Kuba Gasiorowski, kgasiorowski, 109776237, kuba.gasiorowski@sbu.edu
+ * 
+ * Homework #7
+ * Recitation 03
+ * Rec TA: Ka Wing Fong
+ * Grading Ta: Zhichuang Sun
+ * 
+ * Class used to compare two WebPages by Pagerank.
+ * 
+ * @author Kuba Gasiorowski
+ *
+ */
+public class RankComparator implements Comparator<WebPage>{
 
-	public int compare(Object arg0, Object arg1) 
+	public int compare(WebPage arg0, WebPage arg1) 
 	{
 		
 		return 0;

@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
+ * Kuba Gasiorowski, kgasiorowski, 109776237, kuba.gasiorowski@sbu.edu
+ * 
+ * Homework #7
+ * Recitation 03
+ * Rec TA: Ka Wing Fong
+ * Grading Ta: Zhichuang Sun
+ * 
+ * Represents a web graph. Contains a collection
+ * of webpages, with links coming from certain 
+ * pages to others.
  * 
  * @author Kuba Gasiorowski
  *
@@ -15,6 +25,9 @@ public class WebGraph {
 	
 	public static final int MAX_PAGES = 40;
 	
+	/**
+	 * Creates a new WebGraph with empty fields.
+	 */
 	public WebGraph()
 	{
 		
@@ -23,6 +36,19 @@ public class WebGraph {
 		
 	}
 	
+	/**
+	 * Builds a WebGraph from the two files passed in, one
+	 * containing pages, and the other containing 
+	 * 
+	 * @param pagesFile
+	 * 		the file where page information is stored
+	 * @param linksFile
+	 * 		the file where link information is stored
+	 * @return
+	 * 		a new WebGraph build from these two files
+	 * @throws IllegalArgumentException
+	 * 		one or both do not exist
+	 */
 	public static WebGraph buildFromFiles(String pagesFile, String linksFile) throws IllegalArgumentException
 	{
 		
@@ -102,6 +128,11 @@ public class WebGraph {
 		
 	}
 	
+	/**
+	 * Gets the pages associated with this WebGraph
+	 * 
+	 * @return
+	 */
 	public ArrayList<WebPage> getPages()
 	{
 		
@@ -109,6 +140,17 @@ public class WebGraph {
 		
 	}
 	
+	/**
+	 * Adds a page to this WebGraph
+	 * 
+	 * @param url
+	 * 		the url of the new page
+	 * @param keywords
+	 * 		the keywords associated with the new page to add
+	 * @throws IllegalArgumentException
+	 * 		indicates that one of the arguments was null
+	 * 		indicates that the page is already contained
+	 */
 	public void addPage(String url, ArrayList<String> keywords) throws IllegalArgumentException
 	{
 	
@@ -125,6 +167,14 @@ public class WebGraph {
 		
 	}
 	
+	/**
+	 * Adds a link between two pages of this WebGraph.
+	 * 
+	 * @param source
+	 * 		the source of the link
+	 * @param destination
+	 * 		the destination of this link
+	 */
 	public void addLink(String source, String destination)
 	{
 		
@@ -161,6 +211,12 @@ public class WebGraph {
 		
 	}
 	
+	/**
+	 * Removes a page from this WebGraph.
+	 * 
+	 * @param url
+	 * 		the url of the page to remove
+	 */
 	public void removePage(String url)
 	{
 	
@@ -196,6 +252,11 @@ public class WebGraph {
 		
 	}
 	
+	/**
+	 * A helper method to row and column of a matrix.
+	 * 
+	 * @param index
+	 */
 	private void removeRowAndColumn(int index)
 	{
 		
@@ -209,6 +270,14 @@ public class WebGraph {
 		
 	}
 	
+	/**
+	 * Removes a link between two pages.
+	 * 
+	 * @param source
+	 * 		the source of the link
+	 * @param destination
+	 * 		the destination of the link
+	 */
 	public void removeLink(String source, String destination)
 	{
 		
@@ -246,6 +315,9 @@ public class WebGraph {
 		
 	}
 	
+	/**
+	 * Cycles through each page and updates the pagerank for each one.
+	 */
 	private void updatePageRanks()
 	{
 		
@@ -254,6 +326,9 @@ public class WebGraph {
 		
 	}
 	
+	/**
+	 * Prints a neatly formatted table for this webgraph.
+	 */
 	public void printTable()
 	{
 		
@@ -271,6 +346,14 @@ public class WebGraph {
 		
 	}
 	
+	/**
+	 * Gets a string representing the links from this page.
+	 * 
+	 * @param src
+	 * 		the source of links to look for
+	 * @return
+	 * 		a string that represents each link to each page from src
+	 */
 	private String getLinks(int src)
 	{
 		
@@ -292,6 +375,9 @@ public class WebGraph {
 		
 	}
 	
+	/**
+	 * Prints the two-dimensional link array.
+	 */
 	public void printLinkArray()
 	{
 		
