@@ -60,9 +60,10 @@ public class SearchEngine {
 			System.out.print("> ");
 			command = sc.nextLine().toUpperCase().split(" ")[0];
 			
-			if(command.equals("Q"))
+			if(command.equals("Q") || command.equals("EXIT") || command.equals("QUIT"))
 			{
 				
+				//Code to exit the program
 				System.out.println("Exiting...");
 				finished = true;
 				
@@ -70,18 +71,21 @@ public class SearchEngine {
 			else if(command.equals("AP"))
 			{
 				
+				//Code to add a webpage
 				System.out.println("You chose AP");
 				
 			}
 			else if(command.equals("RP"))
 			{
 				
+				//Code to remove a webpage
 				System.out.println("You chose RP");
 				
 			}
 			else if(command.equals("AL"))
 			{
 				
+				//Code to add a link
 				String src, dest;
 				
 				try{
@@ -107,19 +111,18 @@ public class SearchEngine {
 			else if(command.equals("RL"))
 			{
 				
-				
-				
-				
-				System.out.println("You chose RM");
+				//Code to remove a link
+				System.out.println("You chose RL");
 				
 			}
 			else if(command.equals("P"))
 			{
 				
-				System.out.print(TAB + "(I) Sort based on index (ASC)\n"
+				//Code to print the graph
+				System.out.println(TAB + "(I) Sort based on index (ASC)\n"
 							   + TAB + "(U) Sort based on URL (ASC)\n"
 							   + TAB + "(R) Sort based on rank (DSC)\n"
-							   + TAB + "(Q) Quit (return to previous menu)\n> ");
+							   + TAB + "(Q) Quit (return to previous menu)");
 				
 				
 				String printCommand; 
@@ -128,30 +131,39 @@ public class SearchEngine {
 				while(!printFinished)
 				{
 					
+					System.out.print("> ");
 					printCommand = sc.nextLine().toUpperCase().split(" ")[0];
 					
 					if(printCommand.equals("Q"))
 					{
 						
+						//Exits the printing command
 						printFinished = true;
+						web.sortByIndex();
 						
 					}
 					else if(printCommand.equals("I"))
 					{
 						
-						System.out.println("You chose I");
+						//Prints the table sorted by index
+						web.sortByIndex();
+						web.printTable();
 						
 					}
 					else if(printCommand.equals("U"))
 					{
 						
-						System.out.println("You chose U");						
+						//Prints the table sorted by URL
+						web.sortByURL();
+						web.printTable();
 						
 					}
 					else if(printCommand.equals("R"))
 					{
 						
-						System.out.println("You chose R");						
+						//Prints the table sorted by pagerank
+						web.sortByRank();
+						web.printTable();
 						
 					}
 					else
@@ -168,6 +180,7 @@ public class SearchEngine {
 			else if(command.equals("S"))
 			{
 				
+				//Code to do search for a certain keyword
 				System.out.println("You chose S");
 				
 			}

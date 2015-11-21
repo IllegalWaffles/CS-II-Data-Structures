@@ -70,6 +70,19 @@ public class WebPage {
 	}
 	
 	/**
+	 * Sets the index of this WebPage to whatever is passed in.
+	 * 
+	 * @param index
+	 * 		The new index of this WebPage.
+	 */
+	public void setIndex(int index)
+	{
+		
+		this.index = index;
+		
+	}
+	
+	/**
 	 * Returns the calculated pagerank of this page.
 	 * 
 	 * @return
@@ -114,7 +127,7 @@ public class WebPage {
 	public String toString()
 	{
 		
-		return " | " + url + " |###| " + keywords;
+		return index + " | " + url + " |###| " + keywords;
 		
 	}
 	

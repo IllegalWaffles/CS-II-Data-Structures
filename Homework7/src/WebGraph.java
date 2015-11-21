@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -86,7 +87,7 @@ public class WebGraph {
 			for(int i = 1; i < parsedInput.length; i++)
 				keywords.add(parsedInput[i]);
 			
-			web.getPages().add(new WebPage(url, keywords));
+			web.addPage(url, keywords);
 			
 			
 		}
@@ -129,18 +130,6 @@ public class WebGraph {
 	}
 	
 	/**
-	 * Gets the pages associated with this WebGraph
-	 * 
-	 * @return
-	 */
-	public ArrayList<WebPage> getPages()
-	{
-		
-		return pages;
-		
-	}
-	
-	/**
 	 * Adds a page to this WebGraph
 	 * 
 	 * @param url
@@ -161,7 +150,7 @@ public class WebGraph {
 			if(w.getURL().equals(url))
 				throw new IllegalArgumentException("Page not added, this url already contained");
 		
-		pages.add(new WebPage(url, keywords));		
+		pages.add(new WebPage(url, keywords, pages.size()));		
 		
 		updatePageRanks();
 		
@@ -245,6 +234,11 @@ public class WebGraph {
 		//Remove the page from pages
 		pages.remove(indexToRemove);
 		
+		//Resets the indexes of each WebPage
+		int i = 0;
+		for(WebPage w : pages)
+			w.setIndex(i++);
+			
 		//Remove the row and columns from the list array
 		removeRowAndColumn(indexToRemove);
 		
@@ -253,7 +247,7 @@ public class WebGraph {
 	}
 	
 	/**
-	 * A helper method to row and column of a matrix.
+	 * A helper method to remove a row and column of a matrix.
 	 * 
 	 * @param index
 	 */
@@ -267,6 +261,8 @@ public class WebGraph {
 		for(int i = index; i < MAX_PAGES - 1; i++)
 			for(int j = 0; j < MAX_PAGES - 1; j++)
 				links[i][j] = links[i+1][j];
+		
+		//Code to set the 
 		
 	}
 	
@@ -306,7 +302,7 @@ public class WebGraph {
 		if(sourceIndex == -1)
 			throw new IllegalArgumentException("Error: " + source + " not found in this WebGraph");
 		
-		else if(sourceIndex == -1)
+		else if(destinationIndex == -1)
 			throw new IllegalArgumentException("Error: " + destination + " not found in this WebGraph");
 		
 		links[sourceIndex][destinationIndex] = 0;
@@ -333,16 +329,43 @@ public class WebGraph {
 	{
 		
 		String toPrint = "";
-		int i = 0;
 		
 		for(WebPage p : pages)
 		{
-		
-			toPrint = i++ + "" + p;			
-			//toPrint = toPrint.replace("###", getLinks(i));
-			System.out.println(toPrint);
+			
+			System.out.println(p);
 		
 		}
+		
+	}
+	
+	/**
+	 * Sorts the WebGraph page list by index.
+	 */
+	public void sortByIndex()
+	{
+		
+		Collections.sort(pages, new IndexComparator());
+		
+	}
+	
+	/**
+	 * Sorts the WebGraph page list by pagerank.
+	 */
+	public void sortByRank()
+	{
+		
+		Collections.sort(pages, new RankComparator());
+		
+	}
+	
+	/**
+	 * Sorts the WebGraph page list by URL. (alphabetically)
+	 */
+	public void sortByURL()
+	{
+		
+		Collections.sort(pages, new URLComparator());
 		
 	}
 	
