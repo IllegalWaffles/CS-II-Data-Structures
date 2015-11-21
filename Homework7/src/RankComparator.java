@@ -21,9 +21,9 @@ public class RankComparator implements Comparator<WebPage>{
 		if(a.getRank() == b.getRank())
 			return 0;
 		else if(a.getRank() < b.getRank())
-			return -1;
-		else
 			return 1;
+		else
+			return -1;
 		
 	}
 	
