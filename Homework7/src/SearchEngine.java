@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -35,12 +36,6 @@ public class SearchEngine {
 		
 		web = WebGraph.buildFromFiles(PAGES_FILE, LINKS_FILE);
 		
-		web.printLinkArray();
-		
-		System.out.println();
-
-		web.printTable();
-		
 		boolean finished = false;
 		Scanner sc = new Scanner(System.in);
 		String command;
@@ -72,14 +67,36 @@ public class SearchEngine {
 			{
 				
 				//Code to add a webpage
-				System.out.println("You chose AP");
+				String url, keywordArray[];
+				ArrayList<String> keywords = new ArrayList<String>();
+				
+				System.out.print("Enter a URL: ");
+				url = sc.nextLine();
+				System.out.print("Enter keywords (space-separated): ");
+				keywordArray = sc.nextLine().split(" ");
+				
+				//Converts this String array into an arraylist
+				for(int i = 0; i < keywordArray.length; i++)
+					keywords.add(keywordArray[i]);
+					
+				if(web.addPage(url, keywords))
+					System.out.println("Page " + url + " successfully added.");
+				else
+					System.out.println("Page not added. Something went wrong");
 				
 			}
 			else if(command.equals("RP"))
 			{
 				
 				//Code to remove a webpage
-				System.out.println("You chose RP");
+				String toRemove;
+				System.out.print("Enter a URL: ");
+				toRemove = sc.nextLine();
+				
+				if(web.removePage(toRemove))
+					System.out.println("Page " + toRemove + " successfully removed.");
+				else
+					System.out.println("Page not removed. Something went wrong");
 				
 			}
 			else if(command.equals("AL"))
@@ -88,31 +105,32 @@ public class SearchEngine {
 				//Code to add a link
 				String src, dest;
 				
-				try{
+				System.out.print("Enter a source URL: ");
+				src = sc.nextLine();
+				System.out.print("Enter a destination URL: ");
+				dest = sc.nextLine();
 				
-					System.out.print("Enter a source URL: ");
-					src = sc.nextLine();
-					System.out.print("Enter a destination URL: ");
-					dest = sc.nextLine();
-				
-					web.addLink(src, dest);
-				
+				if(web.addLink(src, dest))
 					System.out.println("Link added.");
-					
-				}
-				catch(Exception e)
-				{
-					
-					System.out.println(e.getMessage());
-					
-				}
+				else
+					System.out.println("Link not added. Something went wrong");
 				
 			}
 			else if(command.equals("RL"))
 			{
 				
+				String src, dest;
+				
 				//Code to remove a link
-				System.out.println("You chose RL");
+				System.out.print("Enter a source URL: ");
+				src = sc.nextLine();
+				System.out.print("Enter a destination URL: ");
+				dest = sc.nextLine();
+				
+				if(web.removeLink(src, dest))
+					System.out.println("Link removed.");
+				else
+					System.out.println("Link not removed. Something went wrong");
 				
 			}
 			else if(command.equals("P"))
@@ -120,9 +138,9 @@ public class SearchEngine {
 				
 				//Code to print the graph
 				System.out.println(TAB + "(I) Sort based on index (ASC)\n"
-							   + TAB + "(U) Sort based on URL (ASC)\n"
-							   + TAB + "(R) Sort based on rank (DSC)\n"
-							   + TAB + "(Q) Quit (return to previous menu)");
+							    + TAB + "(U) Sort based on URL (ASC)\n"
+							    + TAB + "(R) Sort based on rank (DSC)\n"
+							    + TAB + "(Q) Quit (return to previous menu)");
 				
 				
 				String printCommand; 
