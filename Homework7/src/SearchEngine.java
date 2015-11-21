@@ -38,7 +38,7 @@ public class SearchEngine {
 		web.printLinkArray();
 		
 		System.out.println();
-		
+
 		web.printTable();
 		
 		boolean finished = false;
@@ -46,13 +46,13 @@ public class SearchEngine {
 		String command;
 		
 		System.out.println("Menu:\n" 
-						 + TAB + "(AP) - Add a new page to the graph.\n"
-					 	 + TAB + "(RP) - Remove a page from the graph.\n"
-					 	 + TAB + "(AL) - Add a link between pages in the graph.\n"
-						 + TAB + "(RM) - Remove a link between pages in the graph.\n"
-						 + TAB + "(P) - Print the graph.\n"
-						 + TAB + "(S) - Search for pages with a keyword.\n"
-						 + TAB + "(Q) - Quit.");
+				 		  + TAB + "(AP) - Add a new page to the graph.\n"
+				 	 	  + TAB + "(RP) - Remove a page from the graph.\n"
+					 	  + TAB + "(AL) - Add a link between pages in the graph.\n"
+						  + TAB + "(RM) - Remove a link between pages in the graph.\n"
+						  + TAB + "(P) - Print the graph.\n"
+						  + TAB + "(S) - Search for pages with a keyword.\n"
+						  + TAB + "(Q) - Quit.");
 		
 		while(!finished)
 		{
@@ -146,24 +146,33 @@ public class SearchEngine {
 					{
 						
 						//Prints the table sorted by index
+						System.out.println("\nPrinting table by index:\n");
+
 						web.sortByIndex();
 						web.printTable();
+						System.out.println();
 						
 					}
 					else if(printCommand.equals("U"))
 					{
 						
 						//Prints the table sorted by URL
+						System.out.println("\nPrinting table by URL:\n");
+						
 						web.sortByURL();
 						web.printTable();
+						System.out.println();
 						
 					}
 					else if(printCommand.equals("R"))
 					{
 						
 						//Prints the table sorted by pagerank
+						System.out.println("\nPrinting table by pagerank:\n");
+						
 						web.sortByRank();
 						web.printTable();
+						System.out.println();
 						
 					}
 					else

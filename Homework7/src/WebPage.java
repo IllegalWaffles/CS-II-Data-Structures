@@ -96,6 +96,19 @@ public class WebPage {
 	}
 	
 	/**
+	 * Sets the pagerank for this webpage.
+	 * 
+	 * @param rank
+	 * 		the new rank of this WebPage
+	 */
+	public void setRank(int rank)
+	{
+		
+		this.rank = rank;
+		
+	}
+	
+	/**
 	 * Gets the keywords associated with this page.
 	 * 
 	 * @return
@@ -127,7 +140,8 @@ public class WebPage {
 	public String toString()
 	{
 		
-		return index + " | " + url + " |###| " + keywords;
+		String format = "%3d   | %-19s |%5d    | %-18s| %s";
+		return String.format(format, index, url, rank, "###", keywords);
 		
 	}
 	

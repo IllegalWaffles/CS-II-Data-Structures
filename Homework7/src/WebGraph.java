@@ -342,6 +342,19 @@ public class WebGraph {
 		
 		//This code updates the page ranks for each page
 		//Call after removing or adding a page or link
+		int rank = 0;
+		
+		for(WebPage w : pages)
+		{
+			
+			rank = 0;
+			
+			for(int i = 0; i < pages.size(); i++)
+				rank += links[i][w.getIndex()];
+			
+			w.setRank(rank);
+			
+		}
 		
 	}
 	
@@ -351,14 +364,11 @@ public class WebGraph {
 	public void printTable()
 	{
 		
-		String toPrint = "";
+		System.out.println("Index   URL                  PageRank   Links               Keywords\n"
+						 + "-------------------------------------------------------------------------------------------------------");
 		
 		for(WebPage p : pages)
-		{
-			
 			System.out.println(p);
-		
-		}
 		
 	}
 	
