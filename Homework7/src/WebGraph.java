@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -140,19 +141,20 @@ public class WebGraph {
 	 * 		indicates that one of the arguments was null
 	 * 		indicates that the page is already contained
 	 */
-	public void addPage(String url, ArrayList<String> keywords) throws IllegalArgumentException
+	public boolean addPage(String url, Collection<String> keywords)
 	{
 	
 		if(url == null || keywords == null)
-			throw new IllegalArgumentException("Page not added, one of the arguments was null");
+			return false;
 		
 		for(WebPage w : pages)
 			if(w.getURL().equals(url))
-				throw new IllegalArgumentException("Page not added, this url already contained");
+				return false;
 		
-		pages.add(new WebPage(url, keywords, pages.size()));		
+		pages.add(new WebPage(url, (ArrayList<String>)keywords, pages.size()));		
 		
 		updatePageRanks();
+		return true;
 		
 	}
 	
@@ -164,7 +166,7 @@ public class WebGraph {
 	 * @param destination
 	 * 		the destination of this link
 	 */
-	public void addLink(String source, String destination)
+	public boolean addLink(String source, String destination)
 	{
 		
 		int sourceIndex = -1, destinationIndex = -1;
@@ -190,13 +192,14 @@ public class WebGraph {
 			}
 		
 		if(sourceIndex == -1)
-			throw new IllegalArgumentException("Error: " + source + " not found in this WebGraph");
+			return false;
 		else if(sourceIndex == -1)
-			throw new IllegalArgumentException("Error: " + destination + " not found in this WebGraph");
+			return false;
 		
 		links[sourceIndex][destinationIndex] = 1;
 		
 		updatePageRanks();
+		return true;
 		
 	}
 	
@@ -206,7 +209,7 @@ public class WebGraph {
 	 * @param url
 	 * 		the url of the page to remove
 	 */
-	public void removePage(String url)
+	public boolean removePage(String url)
 	{
 	
 		//Code to remove pages from the collection
@@ -214,7 +217,7 @@ public class WebGraph {
 		
 		//If the url is null, do nothing
 		if(url == null)
-			return;
+			return false;
 		
 		int indexToRemove = -1;
 		
@@ -229,7 +232,7 @@ public class WebGraph {
 		
 		//If the url was not found, do nothing
 		if(indexToRemove == -1)
-			return;
+			return false;
 		
 		//Remove the page from pages
 		pages.remove(indexToRemove);
@@ -245,6 +248,7 @@ public class WebGraph {
 		updatePageIndices();
 		
 		updatePageRanks();
+		return true;
 		
 	}
 	
@@ -297,7 +301,7 @@ public class WebGraph {
 	 * @param destination
 	 * 		the destination of the link
 	 */
-	public void removeLink(String source, String destination)
+	public boolean removeLink(String source, String destination)
 	{
 		
 		int sourceIndex = -1, destinationIndex = -1;
@@ -323,14 +327,15 @@ public class WebGraph {
 			}
 		
 		if(sourceIndex == -1)
-			throw new IllegalArgumentException("Error: " + source + " not found in this WebGraph");
+			return false;
 		
-		else if(destinationIndex == -1)
-			throw new IllegalArgumentException("Error: " + destination + " not found in this WebGraph");
+		if(destinationIndex == -1)
+			return false;
 		
 		links[sourceIndex][destinationIndex] = 0;
 		
 		updatePageRanks();
+		return true;
 		
 	}
 	
