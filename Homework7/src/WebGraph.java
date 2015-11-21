@@ -262,7 +262,16 @@ public class WebGraph {
 			for(int j = 0; j < MAX_PAGES - 1; j++)
 				links[i][j] = links[i+1][j];
 		
-		//Code to set the 
+		//Code to set the outer row and column links to 0. 
+		//So if pages.size() is 3, set row and column index
+		//3 to all 0's (remove all these links), since they are
+		//Out of the bounds of our logical matrix
+		
+		for(int i = 0; i < pages.size(); i++)
+			links[pages.size()][i] = 0;
+		
+		for(int j = 0; j < pages.size(); j++)
+			links[j][pages.size()] = 0;
 		
 	}
 	
