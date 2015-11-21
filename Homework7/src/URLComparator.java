@@ -18,7 +18,7 @@ public class URLComparator implements Comparator<WebPage>{
 	public int compare(WebPage a, WebPage b)
 	{
 	
-		return 0;
+		return a.getURL().compareTo(b.getURL());
 		
 	}
 

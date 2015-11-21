@@ -15,11 +15,16 @@ import java.util.Comparator;
  */
 public class RankComparator implements Comparator<WebPage>{
 
-	public int compare(WebPage arg0, WebPage arg1) 
+	public int compare(WebPage a, WebPage b) 
 	{
 		
-		return 0;
-	
+		if(a.getRank() == b.getRank())
+			return 0;
+		else if(a.getRank() < b.getRank())
+			return -1;
+		else
+			return 1;
+		
 	}
 	
 }

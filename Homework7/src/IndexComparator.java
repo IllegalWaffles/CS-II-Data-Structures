@@ -18,7 +18,12 @@ public class IndexComparator implements Comparator<WebPage>{
 	public int compare(WebPage a, WebPage b)
 	{
 		
-		return 0;
+		if(a.getIndex() < b.getIndex())
+			return -1;
+		else if(a.getIndex() > b.getIndex())
+			return 1;
+		else 
+			return 0;
 		
 	}
 	
