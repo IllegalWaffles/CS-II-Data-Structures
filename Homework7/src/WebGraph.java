@@ -242,6 +242,8 @@ public class WebGraph {
 		//Remove the row and columns from the list array
 		removeRowAndColumn(indexToRemove);
 		
+		updatePageIndices();
+		
 		updatePageRanks();
 		
 	}
@@ -270,8 +272,20 @@ public class WebGraph {
 		for(int i = 0; i < pages.size(); i++)
 			links[pages.size()][i] = 0;
 		
-		for(int j = 0; j < pages.size(); j++)
-			links[j][pages.size()] = 0;
+		for(int i = 0; i < pages.size(); i++)
+			links[i][pages.size()] = 0;
+		
+	}
+	
+	/**
+	 * Updates the page indices of each WebPage in this WebGraph.
+	 */
+	private void updatePageIndices()
+	{
+		
+		int i = 0;
+		for(WebPage w : pages)
+			w.setIndex(i++);
 		
 	}
 	
