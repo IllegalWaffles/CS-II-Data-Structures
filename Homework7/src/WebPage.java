@@ -124,8 +124,8 @@ public class WebPage {
 	public String toString()
 	{
 		
-		String format = "%3d   | %-19s |%5d    | %-18s| %s";
-		return String.format(format, index, url, rank, "###", keywords);
+		String format = "%3d   | %-19s |%5d    | %s";
+		return String.format(format, index, url, rank, "###");
 		
 	}
 	

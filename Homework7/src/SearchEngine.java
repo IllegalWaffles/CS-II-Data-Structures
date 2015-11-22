@@ -149,7 +149,7 @@ public class SearchEngine {
 				while(!printFinished)
 				{
 					
-					System.out.print("> ");
+					System.out.print("(print) > ");
 					printCommand = sc.nextLine().toUpperCase().split(" ")[0];
 					
 					if(printCommand.equals("Q"))
@@ -196,7 +196,7 @@ public class SearchEngine {
 					else
 					{
 						
-						System.out.println("Command not recognized. Try again");						
+						System.out.println("Command not recognized. Try again (enter q to get back to the main menu)");						
 						
 					}
 					
@@ -213,11 +213,7 @@ public class SearchEngine {
 				
 			}
 			else
-			{
-				
 				System.out.println("Command not recognized");
-				
-			}
 			
 			
 		}

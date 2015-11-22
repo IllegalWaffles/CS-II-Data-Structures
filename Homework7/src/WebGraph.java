@@ -196,7 +196,7 @@ public class WebGraph {
 		
 		if(sourceIndex == -1)
 			return false;
-		else if(sourceIndex == -1)
+		if(destinationIndex == -1)
 			return false;
 		
 		links[sourceIndex][destinationIndex] = 1;
@@ -384,12 +384,21 @@ public class WebGraph {
 	public void printTable()
 	{
 		
-		System.out.println("Index   URL                  PageRank   Links               Keywords\n"
+		System.out.println("Index   URL                  PageRank   Links                  Keywords\n"
 						 + "-------------------------------------------------------------------------------------------------------");
 		
-		for(WebPage p : pages)
-			System.out.println(p);
+		String format = "%-60s | %-100s";
+		String toString, keywords;
 		
+		for(WebPage p : pages)
+		{
+			
+			toString = p.toString().replace("###", getLinks(p.getIndex()));
+			keywords = p.getKeywords().toString();
+			
+			System.out.println(String.format(format, toString, keywords));
+			
+		}
 	}
 	
 	/**
@@ -435,7 +444,13 @@ public class WebGraph {
 		
 		String toReturn = "";
 		
-		
+		for(int j = 0; j < pages.size(); j++)
+			if(links[src][j] == 1)
+			{
+				
+				toReturn += j + ", ";
+				
+			}
 		
 		return toReturn;
 		
