@@ -208,7 +208,8 @@ public class SearchEngine {
 			{
 				
 				//Code to do search for a certain keyword
-				System.out.println("You chose S");
+				System.out.print("Enter a keyword: ");
+				web.searchForKeyword(sc.nextLine());
 				
 			}
 			else

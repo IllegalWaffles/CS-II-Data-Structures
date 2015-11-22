@@ -34,25 +34,9 @@ public class WebPage {
 	public WebPage(String url, ArrayList<String> keywords, int index)
 	{
 		
-		this(url, keywords);
-		this.index = index;
-		
-	}
-	
-	/**
-	 * Creates a new WebPage with the given parameters.
-	 * 
-	 * @param url
-	 * 		the url of this webpage
-	 * @param keywords
-	 * 		the keywords associated with this page
-	 */
-	public WebPage(String url, ArrayList<String> keywords)
-	{
-		
 		this.url = url;
 		this.keywords = keywords;
-		index = 0;
+		this.index = index;
 		
 	}
 	

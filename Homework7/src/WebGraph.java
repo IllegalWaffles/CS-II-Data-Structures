@@ -154,6 +154,9 @@ public class WebGraph {
 		pages.add(new WebPage(url, (ArrayList<String>)keywords, pages.size()));		
 		
 		updatePageRanks();
+		
+		//Indicates everything went smoothly and the method
+		//executed without issue
 		return true;
 		
 	}
@@ -199,6 +202,9 @@ public class WebGraph {
 		links[sourceIndex][destinationIndex] = 1;
 		
 		updatePageRanks();
+		
+		//Indicates everything went smoothly and the method
+		//executed without issue
 		return true;
 		
 	}
@@ -245,9 +251,14 @@ public class WebGraph {
 		//Remove the row and columns from the list array
 		removeRowAndColumn(indexToRemove);
 		
+		//Updates the displaced page indices
 		updatePageIndices();
 		
+		//Updates the new page ranks for this graph
 		updatePageRanks();
+		
+		//Indicates everything went smoothly and the method
+		//executed without issue
 		return true;
 		
 	}
@@ -256,15 +267,16 @@ public class WebGraph {
 	 * A helper method to remove a row and column of a matrix.
 	 * 
 	 * @param index
+	 * 		
 	 */
 	private void removeRowAndColumn(int index)
 	{
 		
-		for(int j = index; j < MAX_PAGES - 1; j++)
+		for(int j = index; j < MAX_PAGES - 2; j++)
 			for(int i = 0; i < MAX_PAGES - 1; i++)
 				links[i][j] = links[i][j+1];
 		
-		for(int i = index; i < MAX_PAGES - 1; i++)
+		for(int i = index; i < MAX_PAGES - 2; i++)
 			for(int j = 0; j < MAX_PAGES - 1; j++)
 				links[i][j] = links[i+1][j];
 		
@@ -335,6 +347,9 @@ public class WebGraph {
 		links[sourceIndex][destinationIndex] = 0;
 		
 		updatePageRanks();
+		
+		//Indicates everything went smoothly and the method
+		//executed without issue
 		return true;
 		
 	}
@@ -420,24 +435,60 @@ public class WebGraph {
 		
 		String toReturn = "";
 		
-		/*
 		
-		for(int i = 0; i < pages.size(); i++)
-		{
-			
-			if(links[i][src] == 1)
-				toReturn = i + ", ";
-				
-		}
-		
-		*/
 		
 		return toReturn;
 		
 	}
 	
 	/**
+	 * Searches the graph for a certain keyword and
+	 * prints a neatly formatted table of results.
+	 * 
+	 * @param keyword
+	 * 		the keyword to search for
+	 */
+	public void searchForKeyword(String keyword)
+	{
+		
+		//Code to find our search results and sort them in
+		//PageRank order
+		ArrayList<WebPage> searchResults = new ArrayList<WebPage>();
+		
+		for(WebPage w : pages)
+			for(String s : w.getKeywords())
+				if(s.equals(keyword))
+				{
+					
+					searchResults.add(w);
+					break;
+					
+				}
+		
+		Collections.sort(searchResults, new RankComparator());
+		
+		//Code to print the results in a tabular format
+		
+		String format = "%3d  |%5d     | %s";
+		int i = 1;
+		
+		System.out.println("\nResults:\nRank   PageRank    URL\n---------------------------------------------");
+		
+		if(searchResults.size() == 0)
+			System.out.println("(No results)");
+		else
+			for(WebPage w: searchResults)
+				System.out.println(String.format(format, i++, w.getRank(), w.getURL()));
+		
+		
+	}
+	
+	
+	/**
 	 * Prints the two-dimensional link array.
+	 * 
+	 * Used for debugging purposes.
+	 * 
 	 */
 	public void printLinkArray()
 	{
