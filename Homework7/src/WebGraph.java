@@ -267,6 +267,7 @@ public class WebGraph {
 	 * A helper method to remove a row and column of a matrix.
 	 * 
 	 * @param index
+	 * 		the index of the row and column to remove
 	 * 		
 	 */
 	private void removeRowAndColumn(int index)
